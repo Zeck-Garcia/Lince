@@ -1,0 +1,53 @@
+#divBoxMsgBox{
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    width: 30%;
+    height: auto;
+    overflow-y: auto;
+    z-index: 1000000000;
+    font-size: 0.9rem;
+}
+
+.show{
+    display: block;
+}
+
+.textMsgBox{
+    margin-top: 10px;
+    line-height: 1.2rem;
+}
+
+.btnCloseMsgBox{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0 5px 7px 5px;
+    background-color: rgb(224, 92, 92);
+    border-radius: 3px;
+    color: #fff;
+}
+
+.btnCloseMsgBox:hover{
+    cursor: pointer;
+}
+
+#msgAviso{
+    margin: 10px 0;
+    font-size: 0.8rem !important;
+    
+}
+
+@media (min-width: 751px ) and (max-width: 1100px){
+
+
+}
+
+@media (max-width: 750px) {
+    #divBoxMsgBox{
+        width: 65%;
+    }
+}

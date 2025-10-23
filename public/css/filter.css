@@ -1,0 +1,160 @@
+#containerMenu{
+    background-color: #fff;
+    position: relative;
+    width: 300px;
+    height: 100vh;
+    box-shadow: 2px 2px 3px rgb(241, 241, 241);
+    transition: 0.5s ease-in-out;
+}
+
+.showContainerMenu{
+    width: 55px !important;
+    transition: 0.5s ease-in-out;
+}
+
+#navControl{
+    position: absolute;
+    top: 10px;
+    left: 7px;
+
+}
+
+#navControl > button{
+    /* width: 30px !important; */
+    /* height: 30px !important; */
+    border: none;
+    background-color: rgb(255, 0, 200);
+    border-radius: 6px;
+    box-shadow: 2px 2px 3px rgb(224, 224, 224);
+    font-size: 1.3rem !important;
+    padding: 5px 10px !important;
+}
+
+.menuLateral{
+    /* width: 300px; */
+    /* height: 100vh; */
+}
+
+#menu{
+    position: relative;
+    height: calc(100vh - 70px);
+    font-size: 0.875rem !important;
+    font-weight: 300 !important;
+    padding-left: 0 !important;
+    overflow-y: scroll;
+}
+
+.showMenuSimples{
+    display: none !important;
+    transition: 0.8s ease-in;
+}
+
+#menu > li, .subMenu > li{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    border-bottom: solid 0.5px #ccc;
+    padding: 0 10px;
+    padding-left: 15px !important;
+}
+
+#menu > li > i, .subMenu > li > i{
+    font-size: 1.5rem !important;
+}
+
+#menu > li > a, .subMenu > li > a{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px 0;
+    margin-bottom: 0 !important;
+}
+
+.menuItem:hover, .subMenuItem:hover{
+    background-color: rgb(197, 222, 235);
+}
+
+/* submenu */
+.subMenu{
+    width: 100%;
+    background-color: #d7ecf7;
+    padding-left: 0 !important;
+    opacity: 0;
+    max-height: 0;
+    transition: 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.subMenu > li{
+    padding-left: 20px;
+}
+
+/* div usuario */
+#divUsuario{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+#divUsuario > img{
+    height: 40px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 2px 1px 3px #ccc;
+}
+
+#divUsuario > div{
+    display: flex;
+    flex-direction: column;
+}
+
+#divUsuario > div > p{
+    font-size: 0.8rem;
+}
+
+#divUsuario > div > small{
+    margin-top: -15px;
+    font-size: 0.8rem !important;
+}
+
+/* menu principal */
+.showSubMenu{
+    display: block;
+}
+
+.showDisplay{
+    display: none;
+}
+
+.show{
+    opacity: 1;
+    max-height: 100%;
+    transition: 1.5s ease-out;
+}
+
+.btnSair{
+    position: absolute;
+    bottom: 0;
+    background-color: #a96464;
+    color: #fff !important;
+}
+
+.btnSair:hover{
+    background-color: #f8d7da;
+    color: #000 !important;
+}
+
+@media (max-width: 750px) {
+    .grid-2, .grid-3 .grid-4{
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+}

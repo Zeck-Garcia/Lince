@@ -1,0 +1,87 @@
+
+window.addEventListener('beforeprint', () => {
+    const selectElements = document.querySelectorAll('select')
+
+    selectElements.forEach(selectElement => {
+      const options = selectElement.options
+      if (options.length > 1) { // Se houver opções além do "Selecione"
+        const table = document.createElement('table')
+        table.classList.add('select-options-as-table')
+
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].value !== "") { // Ignora a opção com valor vazio (geralmente "Selecione")
+            const row = document.createElement('tr')
+            row.classList.add('option-row')
+
+            const labelCell = document.createElement('td')
+            labelCell.classList.add('option-cell')
+            labelCell.textContent = options[i].textContent
+
+            const choiceCell = document.createElement('td')
+            choiceCell.classList.add('option-cell')
+            choiceCell.textContent = "|         |" // Espaço para marcar a opção
+
+            row.appendChild(labelCell)
+            row.appendChild(choiceCell)
+            table.appendChild(row)
+          } else if (options.length === 1 && options[0].value == "") {
+            // Se houver apenas a opção "Selecione", não cria a tabela
+            return;
+          } else if (options.length > 0 && options[0].value == "") {
+             // Se a primeira opção for "Selecione", começa a tabela da segunda opção
+             const table = document.createElement('table')
+            table.classList.add('select-options-as-table')
+
+            for (let j = 1; j < options.length; j++) {
+                const row = document.createElement('tr')
+                row.classList.add('option-row')
+
+                const labelCell = document.createElement('td')
+                labelCell.classList.add('option-cell')
+                labelCell.textContent = options[j].textContent
+
+                const choiceCell = document.createElement('td')
+                choiceCell.classList.add('option-cell')
+                choiceCell.textContent = "|         |"// Espaço para marcar a opção
+
+                row.appendChild(labelCell)
+                row.appendChild(choiceCell)
+                table.appendChild(row)
+            }
+            selectElement.parentNode.insertBefore(table, selectElement.nextSibling)
+            return
+          } else {
+              const table = document.createElement('table')
+              table.classList.add('select-options-as-table')
+
+              for (let k = 0; k < options.length; k++) {
+                  const row = document.createElement('tr')
+                  row.classList.add('option-row')
+
+                  const labelCell = document.createElement('td')
+                  labelCell.classList.add('option-cell')
+                  labelCell.textContent = options[k].textContent
+
+                  const choiceCell = document.createElement('td')
+                  choiceCell.classList.add('option-cell')
+                  choiceCell.textContent = "|           |" // Espaço para marcar a opção
+
+                  row.appendChild(labelCell)
+                  row.appendChild(choiceCell)
+                  table.appendChild(row)
+              }
+              selectElement.parentNode.insertBefore(table, selectElement.nextSibling)
+          }
+        }
+        selectElement.parentNode.insertBefore(table, selectElement.nextSibling)
+      }
+    })
+  })
+
+  window.addEventListener('afterprint', () => {
+    // Remove as tabelas geradas após a impressão (opcional)
+    const generatedTables = document.querySelectorAll('.select-options-as-table')
+    generatedTables.forEach(table => {
+      table.remove()
+    })
+  })
