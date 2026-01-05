@@ -30,12 +30,6 @@ O sistema destaca-se pela implementação de RBAC (Role-Based Access Control), o
 
 O sistema foi desenvolvido seguindo o padrão Model-View-Controller (MVC) para garantir uma separação clara entre a lógica de negócio, os dados e a interface:
 
-    Models (app/models/): Contém a lógica de manipulação de dados e as classes de entidade. É aqui que reside a gestão de ligação à base de dados.
-
-    Views: Responsáveis pela apresentação dos dados ao utilizador final, adaptando-se conforme o nível de acesso (RBAC).
-
-    Controllers: Gerem o fluxo de informação, processando as requisições do utilizador e interagindo com os Models.
-
 ⚙️ Configuração e Instalação
 
 Para colocar o sistema em funcionamento, é necessário configurar a ligação à base de dados:
@@ -45,9 +39,6 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
     Abra o ficheiro: DBConnection.php
 
     Edite as credenciais de ligação conforme o seu ambiente:
-
-
-⚙️ Pasta
     
     $host = "localhost";
     
@@ -57,12 +48,6 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
     
     $password = "sua_senha";
 
-🔑 Pasta
-// Localização: app/models/DBConnection.php
-$host = "localhost";
-$db_name = "nome_da_base_de_dados";
-$username = "seu_utilizador";
-$password = "sua_senha";
 
 🔑 Níveis de Acesso
 
@@ -82,4 +67,4 @@ $password = "sua_senha";
 
     Frontend: HTML5, CSS3, JavaScript
 
-Nota: Este repositório serve como portefólio técnico para demonstrar a implementação de regras de negócio complexas e arquitetura de sistemas escalável.
+*Nota: Este projeto foi desenvolvido como uma solução interna personalizada. Embora o desenvolvimento tenha sido interrompido por decisões estratégicas da organização, o código reflete a implementação de regras de negócio complexas e fluxos de trabalho automatizados.*
