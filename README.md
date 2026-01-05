@@ -57,6 +57,13 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
     
     $password = "sua_senha";
 
+🔑 Pasta
+// Localização: app/models/DBConnection.php
+$host = "localhost";
+$db_name = "nome_da_base_de_dados";
+$username = "seu_utilizador";
+$password = "sua_senha";
+
 🔑 Níveis de Acesso
 
     Nível 1 (Operacional): Requisições e acompanhamento.
