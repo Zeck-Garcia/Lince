@@ -3,7 +3,9 @@ ERP & Human Resources Management System 🚀
 Este projeto é um sistema de gestão empresarial (ERP) focado em Recursos Humanos e Gestão de Compras, desenvolvido para centralizar operações críticas de uma organização, desde a formação de colaboradores até ao fluxo de aprovação de suprimentos.
 
 O sistema destaca-se pela implementação de RBAC (Role-Based Access Control), onde a interface e as funcionalidades adaptam-se dinamicamente ao nível de acesso do utilizador.
+
 🛠️ Funcionalidades Principais
+
 1. Gestão de Compras & Procurement
 
     Fluxo de Aprovação: Funcionários podem registar necessidades de compra.
@@ -51,13 +53,16 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
 
 🔑 Níveis de Acesso
 
-    Nível 1 (Operacional): Requisições e acompanhamento.
+    Nível 1 (ADM): Gestão do sistema e Painel de aprovação de ordem de compras.
 
-    Nível 2 (RH): Gestão de funcionários e métricas de formação.
+    Nível 2 (colaborador): Requisições e acompanhamento.
 
-    Nível Responsável: Painel de aprovação e gestão de escalas.
+    Nível 3 (Fornecedor): Submissão de propostas via formulários dinâmicos.
+    
+    Nível 4 (RH): Gestão de funcionários e métricas de formação e gestão de escalas.
 
-    Nível Fornecedor: Submissão de propostas via formulários dinâmicos.
+    Nível 5 (Encomendas): Reponsável pela gestão de stock e controle de demandas relacionadas a produtos
+
 
 🚀 Tecnologias
 
