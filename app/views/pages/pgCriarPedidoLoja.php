@@ -17,7 +17,7 @@
         <div class='quadroAleatorioNoTitle column1 mt-3'>
             <div class='row1'>
         
-                <input type='text' id="txtProcurarProduto" class='form-control' placeholder='Buscar'>
+                <input type='text' id="txtProcurarProduto" class='form-control' placeholder='Digite o número do produto para iniciar...'>
                 <button id="btnBuscarProduto" class='btn btn-success'>Procurar<i class='bi bi-search'></i></button>
             </div>
         

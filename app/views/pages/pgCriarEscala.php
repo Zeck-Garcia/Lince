@@ -2,7 +2,7 @@
 // if($_SESSION["loginUser"] == false){
 //     header('Location: login');
 // } else {
-//     if($_SESSION["loginUser"] != true or $_SESSION["classeAgente"] != "3"){
+//     if($_SESSION["loginUser"] != true or $_SESSION["classeAgente"] != 4){
 //         header('Location: login');
 //     }
 // }

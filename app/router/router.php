@@ -40,33 +40,36 @@ setlocale(LC_ALL, 'pt_PT');
             "formacao" => "app/views/pages/pgFormacao.php",
             "criarOrdemCompra" => "app/views/pages/pgCriarOrderCompra.php",
             "listarOrdemCompra" => "app/views/pages/pgListarOrderCompra.php",
+            "solicitarFerias" => "app/views/pages/pgSolicitarFerias.php",
+            "criarEscala" => "app/views/pages/pgCriarEscala.php",
+            "novoColaborador" => "app/views/pages/pgNovoColaborador.php",
+
+        ],
+
+        "encomendas" => [
+            "home" => "app/views/pages/bemVindo.php",
+
+            "alterarPgto" => "app/views/pages/pgAlterarPgto.php",
+            "transfePendenteAceitar" => "app/views/pages/pgTransfePendentePorAceitar.php",
+            "transfeFaltaStock" => "app/views/pages/pgTransfePorFaltaStock.php",
+            "removerArtigoEncomenda" => "app/views/pages/pgAnularRemoverArtigoEncomenda.php",
+            "anularDocumentoLoja" => "app/views/pages/pgAnularDocumentoLoja.php",
+            "verAnularDocumento" => "app/views/pages/pgVerAnularDocumento.php",
+            "listarEncomendasFeitasLojas" => "app/views/pages/pgReverListEncomendasFeita.php",
+            "listarEncomendasLojas" => "app/views/pages/pgListEncomendasLojas.php",
+            "overViewEncomendas" => "app/views/pages/pgOverViewEncomendas.php",
+
+            "fazerPedidoLoja" => "app/views/pages/pgCriarPedidoLoja.php",
+            "verPedidosLoja" => "app/views/pages/pgVerPedidosLoja.php",
         ],
 
         "aqui" => [
             "home" => "app/views/pages/bemVindo.php",
 
-            "fazerPedidoLoja" => "app/views/pages/pgCriarPedidoLoja.php",
-            "verPedidosLoja" => "app/views/pages/pgVerPedidosLoja.php",
-            
             "criarOrdemCompra" => "app/views/pages/pgCriarOrderCompra.php",
             "listarOrdemCompra" => "app/views/pages/pgListarOrderCompra.php",
             "criarUltilizadores" => "app/views/pages/pgCriarUltilizadores.php",
             "listarUltilizadores" => "app/views/pages/pgListarUltilizadores.php",
-            
-            "listarEncomendasLojas" => "app/views/pages/pgListEncomendasLojas.php",
-            "listarEncomendasFeitasLojas" => "app/views/pages/pgReverListEncomendasFeita.php",
-            "anularDocumentoLoja" => "app/views/pages/pgAnularDocumentoLoja.php",
-            "verAnularDocumento" => "app/views/pages/pgVerAnularDocumento.php",
-            "removerArtigoEncomenda" => "app/views/pages/pgAnularRemoverArtigoEncomenda.php",
-
-            "transfePendenteAceitar" => "app/views/pages/pgTransfePendentePorAceitar.php",
-            "transfeFaltaStock" => "app/views/pages/pgTransfePorFaltaStock.php",
-            "alterarPgto" => "app/views/pages/pgAlterarPgto.php",
-            "overViewEncomendas" => "app/views/pages/pgOverViewEncomendas.php",
-            
-            "solicitarFerias" => "app/views/pages/pgSolicitarFerias.php",
-            "novoColaborador" => "app/views/pages/pgNovoColaborador.php",
-            "criarEscala" => "app/views/pages/pgCriarEscala.php",
         ],
 
         "page404" => "app/views/pages/pg404.php",

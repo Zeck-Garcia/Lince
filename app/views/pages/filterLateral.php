@@ -94,12 +94,27 @@
                                 <i class='sub bi bi-journal-check'></i>
                                 <a class='subMenuText nomePagina' href='{$currentPrefix}?param=formacao' data-pagina=''>Formação</a>
                             </li>
+
+                            <li class='subMenuItem cursorPointer'>
+                                <i class='sub bi bi-person-walking'></i>
+                                <a class='subMenuText nomePagina' href='{$currentPrefix}?param=solicitarFerias' data-pagina=''>Férias</a>
+                            </li>
+
+                            <li class='subMenuItem cursorPointer'>
+                                <i class='sub bi bi-person-plus'></i>
+                                <a class='subMenuText nomePagina' href='{$currentPrefix}?param=novoColaborador' data-pagina=''>Colaboradores</a>
+                            </li>
+
+                            <li class='subMenuItem cursorPointer'>
+                                <i class='sub bi bi-pie-chart'></i>
+                                <a class='subMenuText nomePagina' href='{$currentPrefix}?param=criarEscala' data-pagina=''>Escala</a>
+                            </li>
                         </ul>";
                 } 
             ?>
 
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='pedidoLoja'>
+            <li class='menuItem cursorPointer' data-colapsse='pedidoLoja'>
                 <i class=' bi bi-cart'></i>
                 <a class='menuText'>Stock<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -113,9 +128,9 @@
                         <i class='sub bi bi-cart-check'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=verPedidosLoja" data-pagina=''>Ver pedido de stock</a>
                     </li>
-                </ul> -->
+                </ul>
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='encomendasLojas'>
+            <li class='menuItem cursorPointer' data-colapsse='encomendasLojas'>
                 <i class=' bi bi-card-text'></i>
                 <a class='menuText'>Gerir encomendas<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -129,9 +144,9 @@
                         <i class='sub bi bi-journal-check'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=listarEncomendasFeitasLojas" data-pagina=''>Rever pedidos</a>
                     </li>
-                </ul> -->
+                </ul>
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='anularEncomendas'>
+            <li class='menuItem cursorPointer' data-colapsse='anularEncomendas'>
                 <i class=' bi bi-file-earmark-excel'></i>
                 <a class='menuText'>Anulações<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -150,9 +165,9 @@
                         <i class='sub bi bi-file-earmark-diff'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=removerArtigoEncomenda" data-pagina=''>Remover artigo de encomenda</a>
                     </li>
-                </ul> -->
+                </ul>
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='transferenciaLoja'>
+            <li class='menuItem cursorPointer' data-colapsse='transferenciaLoja'>
                 <i class=' bi bi-signpost-split'></i>
                 <a class='menuText'>Transferência<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -166,9 +181,9 @@
                         <i class='sub bi bi-box-arrow-right'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=transfeFaltaStock" data-pagina=''>Por falta de stock</a>
                     </li>
-                </ul> -->
+                </ul>
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='pagamentoLoja'>
+            <li class='menuItem cursorPointer' data-colapsse='pagamentoLoja'>
                 <i class=' bi bi-currency-dollar'></i>
                 <a class='menuText'>Pagamento<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -177,9 +192,9 @@
                         <i class='sub bi bi-currency-exchange'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=alterarPgto" data-pagina=''>Alterar pagamento</a>
                     </li>
-                </ul> -->
+                </ul>
 
-            <!-- <li class='menuItem cursorPointer' data-colapsse='overViewEncomendas'>
+            <li class='menuItem cursorPointer' data-colapsse='overViewEncomendas'>
                 <i class=' bi bi-puzzle'></i>
                 <a class='menuText'>Encomendas<i class='bi bi-chevron-right'></i></a>
             </li>
@@ -188,9 +203,9 @@
                         <i class='sub bi bi-journal-medical'></i>
                         <a class='subMenuText nomePagina' href="<?= $currentPrefix;?>?param=" data-pagina=''>Pendencia a tratar</a>
                     </li>
-                </ul> -->
-            <!-- 
-            <li class='menuItem cursorPointer' data-colapsse='recursosHumanos'>
+                </ul>
+            
+            <!-- <li class='menuItem cursorPointer' data-colapsse='recursosHumanos'>
                 <i class=' bi bi-postcard'></i>
                 <a class='menuText'>Recursos humanos<i class='bi bi-chevron-right'></i></a>
             </li>

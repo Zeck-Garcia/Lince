@@ -31,7 +31,7 @@ async function buscarProduto(x){
         document.querySelector("#containerProduto").append(teste)
 
         document.querySelector("#btnAdicionarProduto").addEventListener("click", async function(){
-            let checkVazio = await valideVazio()
+            let checkVazio = valideVazio()
             if(checkVazio != 0){
                 let verIgual = await verListIgual()
                 if(!verIgual){
@@ -82,11 +82,11 @@ function addProduto(){
 }
 
 //valida os campos antes de adicionar a lista
-async function valideVazio(){
-    let titleProduto = document.querySelector("#titleProduto")
+function valideVazio(){
+    let txtProcurarProduto = document.querySelector("#txtProcurarProduto")
     let txtQtdProduto = document.querySelector("#txtQtdProduto")
 
-    if(titleProduto && titleProduto.textContent == ""){
+    if(txtProcurarProduto && txtProcurarProduto.value == ""){
         msgAlert("alert-danger","Informe o código do produto para para adicionar um item.")
         return 0
     }
@@ -205,8 +205,10 @@ let btnBuscarProduto = document.querySelector("#btnBuscarProduto")
 if(btnBuscarProduto){
     btnBuscarProduto.addEventListener("click", function(){
         let txtProcurarProduto = document.querySelector("#txtProcurarProduto")
-        if(txtProcurarProduto){
+        if(txtProcurarProduto && txtProcurarProduto.value != ""){
             buscarProduto(txtProcurarProduto.value)
+        } else {
+            msgAlert("alert-warning", "Digite o código do produto primeiro")
         }
     })
 }

@@ -53,27 +53,38 @@ async function afterLoad(){
 }
 
 //exibe os aviso
-function msgAlert(title, msg, time){
-    const teste = document.createElement("div")
+function msgAlert(title, msg, time, nameMsg){
+    let teste = document.createElement("div")
     teste.classList.add("textMsgBox")
     teste.classList.add("alert")
-    teste.classList.add(title)
+    teste.classList.add(title || "alert-warning")
     teste.setAttribute("role", "alert")
-    
-    teste.innerHTML = msg + `<div class='btnCloseMsgBox'>x</div>`
-    
-    document.querySelector("#divBoxMsgBox").style.display = "block"
-    document.querySelector("#divBoxMsgBox").classList.add("show")
-    document.querySelector("#divBoxMsgBox").append(teste)
 
-    const btnClose = teste.querySelector(".btnCloseMsgBox")
+    let criarNomeID = msg.replace(/[^a-zA-Z0-9]/g," ").split(" ")
+    let nomeID = "mensagemAleatoria"
+    criarNomeID.forEach(item=>{
+        if(item.length > 3){
+            nomeID += item.substring(0, 3)
+        }
+    })
+    
+    teste.id = nomeID
+    $(`#${nomeID}`).remove()
+    
+    teste.innerHTML = `<span class="msgMsg">${msg}</span><div class='btnCloseMsgBox'>x</div>`
+    
+    document.getElementById("divBoxMsgBox").style.display = "block"
+    document.getElementById("divBoxMsgBox").classList.add("show")
+    document.getElementById("divBoxMsgBox").append(teste)
+
+    let btnClose = teste.querySelector(".btnCloseMsgBox")
     btnClose.addEventListener("click", function(){
         
         teste.remove()
 
-        if(document.querySelector("#divBoxMsgBox").children.length === 0){
-            document.querySelector("#divBoxMsgBox").classList.remove("show")
-            document.querySelector("#divBoxMsgBox").style.display = "none"
+        if(document.getElementById("divBoxMsgBox").children.length === 0){
+            document.getElementById("divBoxMsgBox").classList.remove("show")
+            document.getElementById("divBoxMsgBox").style.display = "none"
         }
     })
 
@@ -83,9 +94,9 @@ function msgAlert(title, msg, time){
         if(teste.parentElement){
             teste.remove()
     
-            if(document.querySelector("#divBoxMsgBox").children.length === 0){
-                document.querySelector("#divBoxMsgBox").classList.remove("show")
-                document.querySelector("#divBoxMsgBox").style.display = "none"
+            if(document.getElementById("divBoxMsgBox").children.length === 0){
+                document.getElementById("divBoxMsgBox").classList.remove("show")
+                document.getElementById("divBoxMsgBox").style.display = "none"
             }
         }
     }, timee)
@@ -540,6 +551,13 @@ function noSpace(event){
 function capitalizar(str) {
     if (!str) return str
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
+function noBarra(event){
+    let id = event.getAttribute("id")
+    document.getElementById(id).addEventListener("input", function(){
+        this.value = this.value.replace(/[^a-zA-Z0-9]/g,"-")
+    })
 }
 
 function onlyNumber(event) {

@@ -14,6 +14,10 @@ $operation = new manipulacaoDeDados();
             echo "colaborador";
         break;
 
+        case 5:
+            echo "encomendas";
+        break;
+
         case 4:
             echo "recursoHumano";
         break;

@@ -30,11 +30,11 @@ document.addEventListener("keypress", function(e){
 })
 
 //BTNLOGIN CHAMA FUNC PARA VER LOGIN
-const btnLogin = document.querySelector("#btnLogin")
+let btnLogin = document.querySelector("#btnLogin")
 btnLogin.addEventListener("click", function(){
     
-    const txtLogin = document.querySelector("#txtLogin").value
-    const txtSenha = document.querySelector("#txtSenha").value
+    let txtLogin = document.querySelector("#txtLogin").value.replace(/'/g, "").replace(/"/g, "")
+    let txtSenha = document.querySelector("#txtSenha").value.replace(/'/g, "").replace(/"/g, "")
     
     if(txtLogin != "" && txtSenha != ""){
         validarLogin(txtLogin, txtSenha)

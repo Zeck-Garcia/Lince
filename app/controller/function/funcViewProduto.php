@@ -29,8 +29,7 @@ $operation = new manipulacaoDeDados();
             </div>
 
             <div class='mt-3 CampoGroup'>
-                <input type='text' id='txtQtdProduto' class='form-control' onclick='focusInput()' onblur='focusInput()' onfocus='focusInput()'>
-                <label>Quantidade</label>
+                <input type='text' id='txtQtdProduto' class='form-control' onclick='onlyNumber(this)' placeholder='Quantidade'>
             </div>
 
             <div class='mt-3'>

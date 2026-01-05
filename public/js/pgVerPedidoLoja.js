@@ -91,6 +91,8 @@ async function excluirProdutoFeito(event){
                 if(resultExcluir == 1){
                     event.target.closest(".rowList").remove()
                 }
+
+                $("#divModalConfirmar").remove()
             })
         }
 
