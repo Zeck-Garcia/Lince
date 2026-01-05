@@ -46,8 +46,8 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
 
     Edite as credenciais de ligação conforme o seu ambiente:
 
-PHP
 
+🔑 Pasta
 // Localização: app/models/DBConnection.php
 $host = "localhost";
 $db_name = "nome_da_base_de_dados";
