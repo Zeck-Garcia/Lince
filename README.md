@@ -42,13 +42,13 @@ Para colocar o sistema em funcionamento, é necessário configurar a ligação �
 
     Edite as credenciais de ligação conforme o seu ambiente:
     
-    $host = "localhost";
-    
-    $db_name = "nome_da_base_de_dados";
-    
-    $username = "seu_utilizador";
-    
-    $password = "sua_senha";
+    $this->servidor = "localhost";
+
+    $this->banco = "nome_da_base_de_dados";
+
+    $this->usuario = "seu_utilizador";
+
+    $this->senha = "sua_senha";
 
 
 🔑 Níveis de Acesso
