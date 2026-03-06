@@ -1,10 +1,4 @@
-#comente
-options +indexes
-
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-
-#RewriteBase /Lince
-
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

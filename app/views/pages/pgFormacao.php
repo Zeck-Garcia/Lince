@@ -1,22 +1,18 @@
-<?php
- include_once "app/controller/function/funcExpiraSessao.php";
+<?php 
+    require_once "app/views/pages/pgFilterLateral.php";
 ?>
-
-<div class="menuLateral">
-    <?php require_once "app/views/pages/filterLateral.php";?>
-</div>
 
 <div class="bodyPage">
     <div class="groupBody">
     <!--  -->
-        <div class="quadroAleatorioNoTitle row1">
-            <div class="CampoGroup">
+        <div class="quadroAleatorioNoTitle row d-flex g-3">
+            <div class="col-md-5 CampoGroup">
                 <input type="text" class="form-control" id="txtBuscaFormando">
                 <label>Buscar por:</label>
             </div>
 
-            <div class="CampoGroup">
-                <select class="select" id="slcTipoSearch">
+            <div class="CampoGroup col-md-2">
+                <select class="form-select" id="slcTipoSearch">
                     <option value=""></option>
                     <option value="1">Código</option>
                     <option value="2">Nome</option>
@@ -26,18 +22,18 @@
                 <label>Tipo</label>
             </div>
 
-            <div class="CampoGroup">
-                <input type="text" class="form-control" id="txtDeFormando">
+            <div class="CampoGroup col-md-2 active">
+                <input type="date" class="form-control" id="txtDeFormando">
                 <label>De:</label>
             </div>
             
-            <div class="CampoGroup">
-                <input type="text" class="form-control" id="txtAteFormando">
+            <div class="CampoGroup col-md-2 active">
+                <input type="date" class="form-control" id="txtAteFormando">
                 <label>Até:</label>
             </div>
             
-            <div>
-                <button id="btnProcurarOrderCompra" class="btn btn-success"><i class="bi bi-search"></i></button>
+            <div class='col-md-1'>
+                <button id="btnSearchFirstFormando" class="btn btn-success"><i class="bi bi-search"></i></button>
             </div>
         </div>
 
@@ -71,29 +67,38 @@
         </div>
 
         <div  class="quadroAleatorioNoTitle paginationAqui mt-3">
-            <nav id='paginationHome'>
+            <nav aria-label="Navegação de entregas" class="container-pagination">
+                <ul class="pagination justify-content-center custom-pagination" id="paginador">
+                    <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">Próximo</a>
+                    </li>
+                </ul>
             </nav>
         </div>
 
-        <div class="quadroAleatorioNoTitle row1 mt-3">
-            <div class="w-100">
-                <button id="btnAddFormacao" class="btn btn-outline-info">Listar Formação</button>
+        
+
+        <div class="quadroAleatorioNoTitle row mt-3 d-flex g-2">
+            <div class="col-md-4">
+                <button id="btnAddCurso" class="btn btn-outline-info">Listar Cursos</button>
             </div>
 
-            <div class="w-100">
+            <div class="col-md-4">
                 <button id="btnAddLocal" class="btn btn-outline-primary">Listar Local</button>
             </div>
 
-            <div class="w-100">
+            <div class="col-md-4">
                 <button id="btnAddFuncionario" class="btn btn-outline-secondary">Listar funcionários</button>
             </div>
         </div>
     <!--  -->
     </div>
-
-    <footer class="footerPage">
-        <p>Roda pe</p>
-    </footer>
 </div>
 
-<script src="public/js/pgRecursoHumano.js?v=<?= $versao;?>"></script>
+<script src="public/assets/js/pgRecursoHumano.js?v=<?= VERSION ?>"></script>
