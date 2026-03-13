@@ -32,11 +32,11 @@ async function montetableListUtilizador(pagina) {
         let slcDepartamento = document.getElementById("slcDepartamento")
         let slcCargo = document.getElementById("slcCargo")
         let dados = {
-        paginaSet : pagina,
-        nomeUser : txtSearchUser ?.value || '',
-        departamentoUser : slcDepartamento ?.value || '',
-        cargoUser : slcCargo ?.value || ''
-    }
+            paginaSet : pagina,
+            nomeUser : txtSearchUser ?.value || '',
+            departamentoUser : slcDepartamento ?.value || '',
+            cargoUser : slcCargo ?.value || ''
+        }
     let result = await loadListUtilizador(JSON.stringify(dados))
     let tbodyList = document.getElementById("tbodyList")
     tbodyList.textContent = ''

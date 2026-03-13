@@ -32,17 +32,19 @@ $(document).ready(function() {
     $(document).on("input", ".upper-case", function(){
         upperCase(this)
     })
-
-    campoInputLabelSuspenso()
 })
 
 //spinner
 window.addEventListener('load', function() {
-    let preloader = document.getElementById('loaderSpinner')
-    preloader.classList.remove("active")
-
-    let conteudo = document.getElementById('containerContent')
-    conteudo.classList.remove("active")
+    try {
+        let preloader = document.getElementById('loaderSpinner')
+        preloader.classList.remove("active")
+    
+        let conteudo = document.querySelector('.main-content')
+        conteudo.classList.remove("active")
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 /**
@@ -195,45 +197,6 @@ function closeModalSubTela(){
     if(document.querySelector("#divModalSubTela")){
         document.querySelector("#divModalSubTela").remove()
     }
-}
-
-/**
-* 
-* @param {string} titleGet titutlo da mensagem
-* @param {string} msgGet mensagem que sera informada ao ultilizador 
-* @returns 
-*/
-async function openConfirmar(titleGet, msgGet){
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            let dados = {
-                titleSet : titleGet || "Nova ação",
-                msgSet : msgGet || "Deseja confirmar está ação?",
-            }
-
-            let resultModalConfirme = await $.post("././app/views/pages/modal/modalConfirme.php", dados)
-
-            let teste = document.createElement("div")
-            teste.id = "divModalConfirmar"
-            teste.innerHTML = resultModalConfirme
-            
-            document.body.append(teste)
-
-            let btnCloseModal = document.getElementById("btnCloseModal")
-            if(btnCloseModal){
-                btnCloseModal.addEventListener("click", function(){
-                    $("#divModalConfirmar").remove()
-                })
-            }
-
-            resolve()
-
-        } catch (error) {
-            //fazer erro
-            msgAlert("alert-danger", "Erro ao abrir janela, atualize a página." + error)
-        }
-    })
 }
 
 /**
@@ -396,6 +359,8 @@ function formatarDia(data) {
 * @param {int} totalRegistros total de registro
 * @param {int} limite limite de registro por pagina
 * @param {int} paginaAtual pagina atual
+* @param {string} divContainer local onde esta o paginador
+* @param {string} titleOnClick nome da func para passar o paginador
 */
 async function pagination(totalRegistros, limite, paginaAtual, divContainer, titleOnClick) {
     try {
@@ -546,15 +511,13 @@ async function openSubModal(rota, title, msg){
                 if(btnCloseSubModal){
                     btnCloseSubModal.addEventListener("click", ()=> {
                         $("#modalSub-container").textContent = ''
-                        $(".modal-backdrop").remove()
+                        //$(".modal-backdrop").remove()
                         modalEl.remove()
                     })
                 }
             })
         })
 
-        campoInputLabelSuspenso()
-        
         return modalEl
     } catch (error) {
         console.log(error)
@@ -588,8 +551,6 @@ async function openModal(router, title){
 
         let titleModal = container.querySelector(".modal-title")
         titleModal.innerHTML += title
-
-        campoInputLabelSuspenso()
 
         return {
             modalEl,
@@ -642,37 +603,37 @@ function toggleSidebar() {
 }
 
     //label do input sobe ao click do mouse
-function campoInputLabelSuspenso(){
-    document.querySelectorAll(".form-control, .form-select").forEach(item => {
-        if(item){
-            item.addEventListener("focus", () => {
-                item.parentNode.classList.add('active')
-            })
+// function campoInputLabelSuspenso(){
+//     document.querySelectorAll(".form-control, .form-select").forEach(item => {
+//         if(item){
+//             item.addEventListener("focus", () => {
+//                 item.parentNode.classList.add('active')
+//             })
         
-            item.addEventListener('blur', () => {
-                if (!item.value) {
-                    item.parentNode.classList.remove('active')
-                }
-            })
+//             item.addEventListener('blur', () => {
+//                 if (!item.value) {
+//                     item.parentNode.classList.remove('active')
+//                 }
+//             })
         
-            item.addEventListener('input', () => {
-                if (item.value) {
-                    item.parentNode.classList.add('active')
-                } else {
-                    item.parentNode.classList.remove('active')
-                }
-            })
+//             item.addEventListener('input', () => {
+//                 if (item.value) {
+//                     item.parentNode.classList.add('active')
+//                 } else {
+//                     item.parentNode.classList.remove('active')
+//                 }
+//             })
 
-            item.addEventListener("change", ()=>{
-                if(item.value == ""){
-                    item.parentNode.classList.remove('active')
-                } else {
-                    item.parentNode.classList.add('active')
-                }    
-            })
-        }
-    })
-}
+//             item.addEventListener("change", ()=>{
+//                 if(item.value == ""){
+//                     item.parentNode.classList.remove('active')
+//                 } else {
+//                     item.parentNode.classList.add('active')
+//                 }    
+//             })
+//         }
+//     })
+// }
 
 /**
  * 
@@ -864,5 +825,89 @@ async function loadListUtilizador(dadosGet){
         
     } catch (error) {
         console.log(error)
+    }
+}
+
+async function compressImages(files, maxWidth, maxHeight, quality) {
+    let promises = Array.from(files).map(file => {
+        return compressImage(file, maxWidth, maxHeight, quality)
+    })
+
+    return Promise.all(promises)
+        .then(compressedImages => {
+            // Aqui você tem um array com todos os blobs compactados
+            return compressedImages
+        })
+        .catch(error => {
+            console.error("Erro ao compactar as imagens:", error)
+            throw error
+        })
+}
+
+async function compressImage(file, maxWidth, maxHeight, quality) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = event => {
+            const img = new Image()
+            img.src = event.target.result
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas')
+                let width = img.width
+                let height = img.height
+
+                if (width > maxWidth || height > maxHeight) {
+                    if (width > height) {
+                        height = Math.round((height * maxWidth) / width)
+                        width = maxWidth;
+                    } else {
+                        width = Math.round((width * maxHeight) / height)
+                        height = maxHeight
+                    }
+                }
+
+                canvas.width = width
+                canvas.height = height
+                const ctx = canvas.getContext('2d')
+                ctx.drawImage(img, 0, 0, width, height)
+
+                canvas.toBlob(
+                    blob => {
+                        if (blob) {
+                            resolve(blob); // Retorna o Blob compactado
+                        } else {
+                            reject(new Error("Erro ao gerar o Blob da imagem."))
+                        }
+                    },
+                    'image/jpeg',
+                    quality
+                )
+            }
+
+            img.onerror = err => reject(err)
+        }
+
+        reader.onerror = err => reject(err)
+    })
+}
+
+function tipoArquivo(nomeArquivo){
+    let extensao = nomeArquivo.slice(
+        (Math.max(0, nomeArquivo.lastIndexOf('.')) || Infinity) + 1
+    )
+
+    if (extensao.toLowerCase() === 'pdf') {
+        return 'pdf'
+    } else if (extensao.toLowerCase() === 'jpg' || extensao.toLowerCase() === 'jpeg') {
+        return 'image/jpeg'
+    } else if (extensao.toLowerCase() === 'png') {
+        return 'image/png'
+    } else if (extensao.toLowerCase() === 'gif') {
+        return 'image/gif'
+    } else if (extensao.toLowerCase() === 'webp') {
+        return 'image/webp'
+    } else {
+        return 'desconhecido'
     }
 }

@@ -1,4 +1,4 @@
-<?php require_once "app/views/pages/pgFilterLateral.php";?>
+
 
 <div class="bodyPage">
     <div class="groupBody">

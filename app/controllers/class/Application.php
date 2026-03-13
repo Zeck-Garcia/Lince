@@ -61,41 +61,42 @@ class Application{
         $limite = 7;
         $inicio = ($paginaSet * $limite) - $limite;
 
-        $select = "WITH result AS (SELECT ud.*, dp.nomeDepartamento, ca.nomeCargo, cl.nomeClasse FROM tbUserDados ud
+        $select = "WITH result AS (SELECT ud.*, dp.nomeDepartamento, ca.nomeCargo, cl.nomeClasse 
+                    FROM tbFuncionario ud
 
                     LEFT JOIN tbDepartamento dp
-                    ON dp.idDepartamento = ud.departamentoUserDados
+                    ON dp.idDepartamento = ud.departamentoFuncionario
 
                     LEFT JOIN tbCargo ca
-                    ON ca.idCargo = ud.cargoUserDados
+                    ON ca.idCargo = ud.cargoFuncionario
 
                     LEFT JOIN tbClasse cl
-                    ON cl.idClasse = ud.classeUserDados WHERE 1=1 ";
+                    ON cl.idClasse = ud.classeFuncionario WHERE 1=1 ";
 
         $param = [];
         $where = '';
         if($dadosT["nomeUser"] != ''){
-            $where = " AND nomeUserDados=? ";
+            $where = " AND ud.nomeFuncionario=? ";
             $param[] = "";
         }
 
         if($dadosT["departamentoUser"] != 0){
-            $where = " AND departamentoUserDados=? ";
+            $where = " AND ud.departamentoFuncionario=? ";
             $param[] = "";
         }
 
         if($dadosT["cargoUser"] != 0){
-            $where = " AND cargoUserDados=? ";
+            $where = " AND ud.cargoFuncionario=? ";
             $param[] = "";
         }
 
-        if($dadosT["codColaboradorUser"] != 0){
-            $where = " AND codColaboradorUserDados=? ";
+        if(isset($dadosT["codColaboradorUser"]) ? $dadosT["codColaboradorUser"] != 0: false){
+            $where = " AND codFuncionarioFuncionario=? ";
             $param[] = "";
         }
 
-        $selectFim = " ORDER BY ud.idUserDados ASC)
-                            SELECT *, (SELECT COUNT(*) FROM result ) AS totalRegistro FROM result ORDER BY nomeUserDados ASC LIMIT " . $inicio . "," . $limite;
+        $selectFim = " ORDER BY ud.idFuncionario ASC)
+                            SELECT *, (SELECT COUNT(*) FROM result ) AS totalRegistro FROM result ORDER BY nomeFuncionario ASC LIMIT " . $inicio . "," . $limite;
 
         $selectCompleta = $select . $where . $selectFim;
 
@@ -108,20 +109,20 @@ class Application{
         if(count($qry) > 0){
             foreach($qry as $value){
                 $list[] = [
-                    "idUser" => $value["idUserDados"],
-                    "codColaborador" => $value["codColaboradorUserDados"],
-                    "idLogin" => $value["idLogin"],
-                    "nomeUser" => $value["nomeUserDados"],
-                    "idDepartamentoUser" => $value["departamentoUserDados"],
+                    "idUser" => $value["idFuncionario"],
+                    "codColaborador" => $value["codFuncionarioFuncionario"],
+                    "idLogin" => $value["idLidLoginFuncionarioogin"],
+                    "nomeUser" => $value["nomeFuncionario"],
+                    "idDepartamentoUser" => $value["dp.idDepartamento"],
                     "nomeDepartamentoUser" => $value["nomeDepartamento"],
-                    "idCargoUser" => $value["cargoUserDados"],
+                    "idCargoUser" => $value["ca.idCargo"],
                     "nomeCargoUser" => $value["nomeCargo"],
-                    "idClasseUser" => $value["classeUserDados"],
+                    "idClasseUser" => $value["cl.idClasse"],
                     "nomeClasseUser" => $value["nomeClasse"],
-                    "emailUser" => $value["emailUserDados"],
-                    "dataCriacaoUser" => $value["dataCriadoUserDados"],
-                    "receberEmail" => $value["receberEmailUserDados"],
-                    "ativo" => $value["ativoUserDados"],
+                    "emailUser" => $value["emailFuncionario"],
+                    "dataCriacaoUser" => $value["dataCadastroFuncionario"],
+                    "receberEmail" => $value["receberEmailFuncinonario"],
+                    "ativo" => $value["ativo"],
                     "limite" => $limite,
                     "totalRegistro" => $value["totalRegistro"],
                 ];
@@ -130,5 +131,29 @@ class Application{
         return $list;
     }
 
-    
+    public function SearchDadosFornecedor(string $id){
+        $busca = str_replace(array("'", '"'), '', trim(strip_tags($id)));
+        $select = "SELECT * FROM tbFornecedor WHERE idFornecedor = ? OR nomeFornecedor LIKE ? LIMIT 1";
+        $buscaLike = "%" . $busca  . "%";
+        $qry = $this->db->buscar($select, [$busca,$buscaLike]);
+
+        $list = [];
+        if(count($qry) > 0){
+            foreach($qry as $value){
+                $list[] = [
+                    "idFornecedor" => $value["idFornecedor"],
+                    "nomeFornecedor" => $value["nomeFornecedor"],
+                    "siteFornecedor" => $value["siteFornecedor"],
+                    "emailFornecedor" => $value["emailFornecedor"],
+                    "dataCriacaoFornecedor" => $value["dataCriacaoFornecedor"],
+                    "ativoFornecedor" => $value["ativoFornecedor"],
+                    "moradaFornecedor" => $value["moradaFornecedor"],
+                    "contactoFornecedor" => $value["contactoFornecedor"],
+                    "telefoneFornecedor" => $value["telefoneFornecedor"],
+                    "responsavelFornecedor" => $value["responsavelFornecedor"],
+                ]; 
+            }
+        }
+        return $list;
+    }
 }

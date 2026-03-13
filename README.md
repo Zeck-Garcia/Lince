@@ -36,7 +36,7 @@ O sistema foi desenvolvido seguindo o padrão Model-View-Controller (MVC) para g
 
 Para colocar o sistema em funcionamento, é necessário configurar a ligação à base de dados:
 
-    Navegue até ao diretório: app/models/
+    Navegue até ao diretório: app/core/
 
     Abra o ficheiro: DBConnection.php
 

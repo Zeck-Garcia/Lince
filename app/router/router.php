@@ -84,6 +84,12 @@ $routes = array(
         "load-list-cargo-slc" => "app/functions/getLoadListCargo.php",
 
         "load-list-utilizador" => "app/functions/getLoadListUtilizador.php",
+        "load-list-order-comrpa" => "app/functions/getLodListOrdemCompra.php",
+        "get-dados-order-compra" => "app/functions/getDadosOrdemCompra.php",
+
+        "get-search-dados-fornecedor" => "app/functions/getSearchDadosFonecedor.php",
+
+        "crud-order-compra" => "app/functions/crudOrderCompra.php",
     ],
 
     "modal" => [
@@ -95,6 +101,7 @@ $routes = array(
         "modal-add-funcionario" => "app/views/modal/modalAddFuncionario.php",
 
         "modal-utilizador" => "app/views/modal/modalUtilizador.php",
+        "modal-order-compra" => "app/views/modal/modalOrdemCompra.php",
     ],
 );
 
