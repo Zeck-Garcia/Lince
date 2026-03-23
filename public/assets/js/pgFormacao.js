@@ -97,7 +97,7 @@ async function monteListFormando(pagina) {
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>${horaFinal}:${minutoFinal}</td>
+                                    <td class='fw-bold'>${horaFinal}:${minutoFinal}</td>
                                     <td></td>
                                     <td></td>`
 

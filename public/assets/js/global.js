@@ -111,8 +111,10 @@ async function exit(){
 document.querySelectorAll(".enterPress").forEach(element=>{
     element.addEventListener("focus", ()=>{
         element.addEventListener("keypress", (e)=>{
+            console.log(2)
             if(e.key === "Enter"){
                 element.click()
+                console.log(1)
             }
         })
     })
@@ -368,6 +370,7 @@ async function pagination(totalRegistros, limite, paginaAtual, divContainer, tit
         let container = document.getElementById(divContainer)
         let html = ''
 
+        let active = `style='background: var(--bg-pink) !important; color: #fff !important; font-weight: bold;'`
         if(totalPaginas == 0){
             html += `<span class="badge rounded-pill bg-light text-dark border shadow-sm p-2 animate__animated animate__fadeIn" 
                         style="font-size: 0.85rem; font-weight: 500;">
@@ -377,16 +380,16 @@ async function pagination(totalRegistros, limite, paginaAtual, divContainer, tit
         }
         html += `
             <li class="page-item ${paginaAtual === 0 || paginaAtual === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="javascript:void(0)" onclick="${titleOnClick}(${paginaAtual - 1})">Anterior</a>
+                <a class="page-link border-0 bg-transparent fw-bold" href="javascript:void(0)" onclick="${titleOnClick}(${paginaAtual - 1})" ${paginaAtual > 1 ? "style='color: var(--text-pink)'" : ''}>Anterior</a>
             </li>`
 
         for (let i = 1; i <= totalPaginas; i++) {
 
             if (i === paginaAtual) {
-                html += `<li class="page-item active"><a class="page-link">${i}</a></li>`;
+                html += `<li class="page-item"><a class="page-link rounded-circle mx-1 border-0 text-dark" ${paginaAtual == i ? active : ''}>${i}</a></li>`;
             } else {
                 if (i <= 3 || i > totalPaginas - 1 || (i >= paginaAtual - 1 && i <= paginaAtual + 1)) {
-                    html += `<li class="page-item ${paginaAtual == 0 && i == 1 ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" onclick="${titleOnClick}(${i})">${i}</a></li>`
+                    html += `<li class="page-item"><a class="page-link rounded-circle mx-1 border-0 text-dark" ${paginaAtual == 0 && i == 1 ? active : ''} href="javascript:void(0)" onclick="${titleOnClick}(${i})">${i}</a></li>`
                 } else if (i === 4) {
                     html += `<li class="page-item disabled"><a class="page-link">...</a></li>`
                 }
@@ -394,8 +397,8 @@ async function pagination(totalRegistros, limite, paginaAtual, divContainer, tit
         }
 
         html += `
-            <li class="page-item ${paginaAtual === totalPaginas ? 'disabled' : ''}">
-                <a class="page-link" href="javascript:void(0)" onclick="${titleOnClick}(${paginaAtual + 1})">Próximo</a>
+            <li class="page-item ${paginaAtual === totalPaginas || totalPaginas == 1 ? 'disabled' : ''}">
+                <a class="page-link border-0 bg-transparent fw-bold" href="javascript:void(0)" onclick="${titleOnClick}(${paginaAtual + 1})" ${paginaAtual < totalPaginas ? "style='color: var(--text-pink)'" : ''}>Próximo</a>
             </li>`
 
         container.innerHTML = html
@@ -425,14 +428,13 @@ async function enviarEmail(dadosGet){
 
         let result = await response.json()
 
-        if(result.obj &&  typeof result.obj == 'object'){
-            if(result.obj.sucesso){
-                msgAlert("alert-success", result.obj.msg)
-            } else if(result.obj.sucesso) {
-                console.log(2)
-                msgAlert("alert-warning", result.obj.msg)
-            }  
+        if(result.obj &&  typeof result.obj == 'object' && result.obj.sucesso){
+            msgAlert("alert-success", result.obj.msg)
+        } else {
+            msgAlert("alert-warning", result.obj.msg)
         }
+
+        return result
 
     } catch (error) {
         console.log(error)
@@ -477,7 +479,7 @@ async function enviarSMS(dadosGet){
 /**
 * 
 * @param {string} rota nome do submodal a ser aberto 
-* @returns 
+* @returns modal
 */
 async function openSubModal(rota, title, msg){
     try {
@@ -524,7 +526,14 @@ async function openSubModal(rota, title, msg){
     }
 }
 
-async function openModal(router, title){
+/**
+ * 
+ * @param {string} router rota a seguir
+ * @param {string} title titulo da pagina
+ * @param {string} open 1 para modal 2 para submodal 
+ * @returns 
+ */
+async function openModal(router, title, open){
     try {
         let nomeRoute = {title : title}
         if (router == '') {
@@ -534,8 +543,14 @@ async function openModal(router, title){
         let response = await fetch("modal/" + router)
         let html = await response.text()
 
-        let container = document.getElementById('modal-container')
+        let local = document.getElementById('modal-container')
+        if(open == 1) local = document.getElementById('modal-container')
+        if(open == 2) local = document.getElementById('modalSub-container')
+
+        let container = local
         container.innerHTML = ''
+
+        let backdropConfig = (open == 2) ? false : 'static'
         
         let tempDiv = document.createElement('div')
         tempDiv.innerHTML = html
@@ -544,7 +559,7 @@ async function openModal(router, title){
         container.appendChild(modalEl)
 
         let instance = new bootstrap.Modal(modalEl, {
-            backdrop: 'static',
+            backdrop: backdropConfig,
             keyboard: false
         })
         instance.show()
@@ -552,6 +567,10 @@ async function openModal(router, title){
         let titleModal = container.querySelector(".modal-title")
         titleModal.innerHTML += title
 
+        modalEl.addEventListener("hidden.bs.modal",()=>{
+            container.textContent = ''
+        })
+        
         return {
             modalEl,
             container,
@@ -809,6 +828,47 @@ async function loadListCargoSLC(select,id){
  * @param {string} select campo a receber a lista de valores 
  * @returns 
  */
+async function loadListNivelSLC(select){
+    let slcNew = document.getElementById(select)
+    let response = await fetch("api/load-list-nivel-slc", {
+        method : "POST",
+    })
+
+    if(!response.ok) throw new Error("Erro na rede")
+
+    let result = await response.json()
+    slcNew.innerHTML = ""
+
+    let newInputEmpty = document.createElement("option")
+    newInputEmpty.innerHTML = "Selecione"
+    newInputEmpty.value = "0"
+    newInputEmpty.disabled = true
+    newInputEmpty.selected = true
+    slcNew.appendChild(newInputEmpty)
+
+    try {
+        if(result.obj && Array.isArray(result.obj)){
+            result.obj.forEach(item=>{
+                if(item.ativo == 1){
+                    let newInput = document.createElement("option")
+                    newInput.innerHTML = capitalizar(item.nome)
+                    newInput.value = item.id
+                    slcNew.appendChild(newInput)
+                }
+            })
+        } else {
+            msgAlert("alert-danger", "Erro no retorno do banco de dados, atualize a página.")
+        }
+    } catch (error) {
+        msgAlert("alert-danger", "Campo de loja não encontrado")
+    }
+}
+
+/**
+ * 
+ * @param {string} select campo a receber a lista de valores 
+ * @returns 
+ */
 async function loadListUtilizador(dadosGet){
     try {
         let dados = new FormData()
@@ -911,3 +971,108 @@ function tipoArquivo(nomeArquivo){
         return 'desconhecido'
     }
 }
+
+async function loadDadosSearchFornecedor(id){
+    try {
+        let dados = new FormData()
+        dados.append("dados", id)
+
+        let response = await fetch("api/get-search-dados-fornecedor",{
+            method : 'POST',
+            body : dados
+        })
+
+        if(!response.ok) throw new Error("Error")
+
+        return await response.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function getLoadListFornecedor(dadosGet){
+    try {
+        let dados = new FormData()
+        dados.append("dados", JSON.stringify(dadosGet))
+
+        let response = await fetch("api/get-load-list-fornecedor",{
+            method : 'POST',
+            body : dados
+        })
+
+        if(!response.ok) throw new Error("error")
+
+        return response.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function checkLoginExiste(dadosGet) {
+    try {
+        let dados = new FormData()
+        dados.append("dados", dadosGet)
+        let response = await fetch("api/get-login-existe",{
+            method : "POST",
+            body : dados
+        })
+
+        if(!response.ok) throw new Error("Error")
+
+        let result = await response.json()
+
+        // if(result && typeof result == 'object' && result.obj.sucesso){
+        //     msgAlert("alert-warning", result.obj.msg)
+        // }
+        return result
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//cookies
+function setCookie(name, value, days) {
+    let date = new Date()
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+    let expires = "expires=" + date.toUTCString()
+    document.cookie = name + "=" + value + ";" + expires + ";path=/"
+}
+
+/**
+ * 
+ * @param {string} name nome do cookie
+ * @returns 
+ */
+function getCookie(name) {
+    let nameEQ = name + "="
+    let ca = document.cookie.split(';')
+    for(let i=0; i < ca.length; i++) {
+        let c = ca[i]
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length)
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length)
+    }
+    return null
+}
+
+//cookies
+document.addEventListener("DOMContentLoaded", function() {
+    let cookieBanner = document.getElementById("cookie-banner")
+    let acceptBtn = document.getElementById("accept-cookies")
+    let rejectBtn = document.getElementById("reject-cookies")
+
+    if (!getCookie("cookies_aceitos_lince")) {
+        cookieBanner.style.display = "block"
+    } else {
+        cookieBanner.style.display = "none"
+    }
+
+    acceptBtn.addEventListener("click", function() {
+        setCookie("cookies_aceitos_lince", "true", 30)
+        cookieBanner.style.display = "none"
+    });
+
+    rejectBtn.addEventListener("click", function() {
+        setCookie("cookies_aceitos_lince", "false", 1)
+        cookieBanner.style.display = "none"
+    })
+})

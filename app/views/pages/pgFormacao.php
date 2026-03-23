@@ -1,10 +1,117 @@
-<?php 
-    require_once "app/views/pages/pgFilterLateral.php";
-?>
+<div class="container-fluid mt-3">
+    <div class="d-md-flex justify-content-between align-items-center mb-2">
+        <div>
+            <h3 class="fw-bold m-0">Formação</h3>
+            <p class="text-muted small">Gestão de Formação</p>
+        </div>
+        <button id='btnAddFormando' class="btn btn-success px-4 py-2 shadow-sm fw-bold" onclick="">
+            <i class="bi bi-plus-lg me-2"></i> Nova Formação
+        </button>
+    </div>
 
-<div class="bodyPage">
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+        <div class="card-body p-3">
+            <div class="row g-2">
+                <div class="col-md-5">
+                    <div class="form-floating">
+                        <input type="text" id="txtBuscaFormando" class="form-control enterPress" placeholder="Pesquisar por autor, status, data, número ou ...">
+                        <label for="">Pesquisar por autor, status, data, número ou ...</label>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select id="slcTipoSearch" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="1">Código</option>
+                            <option value="2">Nome</option>
+                            <option value="3">Local</option>
+                            <option value="4">Formação</option>
+                        </select>
+                        <label for="">Tipo</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <div class="form-floating">
+                            <input type="date" id="txtDeFormando" class="form-control" placeholder="">
+                            <label for="">sd</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="date" id="txtAteFormando" class="form-control" placeholder="">
+                            <label for="">sd</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <button id="btnSearchFirstFormando" class="btn btn-info" id="" onclick=""><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle mb-0 text-center">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="py-3 border-0">Cód.<br>func.</th>
+                        <th class="py-3 border-0">Nome</th>
+                        <th class="py-3 border-0">Formação</th>
+                        <th class="py-3 border-0">Data</th>
+                        <th class="py-3 border-0">Tempo</th>
+                        <th class="py-3 border-0">Local</th>
+                        <th class="py-3 border-0">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyFormando" >
+                </tbody>
+            </table>
+
+            <nav class="mb-4">
+                <nav id='paginationHome'>
+                    <ul class="pagination justify-content-center" id="paginador">
+                        <li class="page-item disabled"><a class="page-link border-0 bg-transparent" href="#">Anterior</a></li>
+                        <li class="page-item active"><a class="page-link rounded-circle mx-1" href="#" style="background: var(--bg-pink); border: none;">1</a></li>
+                        <li class="page-item"><a class="page-link rounded-circle mx-1 border-0 text-dark" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link rounded-circle mx-1 border-0 text-dark" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link border-0 bg-transparent fw-bold" style="color: var(--text-pink)" href="#">Próximo</a></li>
+                    </ul>
+                </nav>
+            </nav>
+
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4" style="border-radius: 12px;">
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <button id="btnAddCurso" class="btn btn-outline-info btn-lg w-100">Listar Formação</button>
+                </div>
+        
+                <div class="col-md-4">
+                    <button id="btnAddLocal" class="btn btn-outline-primary btn-lg w-100">Listar Local</button>
+                </div>
+        
+                <div class="col-md-4">
+                    <button id="btnAddFuncionario" class="btn btn-outline-secondary btn-lg w-100">Listar funcionários</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+
+<!-- <div class="bodyPage">
     <div class="groupBody">
-    <!--  -->
         <div class="quadroAleatorioNoTitle row d-flex g-3">
             <div class="col-md-5 CampoGroup">
                 <input type="text" class="form-control" id="txtBuscaFormando">
@@ -60,7 +167,7 @@
                         </tr>
                     </thead>
 
-                    <tbody id="tbodyFormando">
+                    <tbody id="tbodyFormando-">
                     </tbody>
                 </table>
             </div>
@@ -97,8 +204,7 @@
                 <button id="btnAddFuncionario" class="btn btn-outline-secondary">Listar funcionários</button>
             </div>
         </div>
-    <!--  -->
     </div>
-</div>
+</div> -->
 
-<script src="public/assets/js/pgRecursoHumano.js?v=<?= VERSION ?>"></script>
+<script src="public/assets/js/pgFormacao.js?v=<?= VERSION ?>"></script>

@@ -3,6 +3,9 @@ date_default_timezone_set('Europe/Lisbon');
 setlocale(LC_ALL, 'pt_PT');
 
 function runRouter($routes) {
+    // $root = preg_replace('/index\.php$/', '', $_SERVER['PHP_SELF']);
+    // $root = str_replace('//', '/', $root);
+
     $url = isset($_GET["url"]) ? explode("/", rtrim($_GET["url"], '/')) : ["home"];
     $prefix = $url[0];
     $param = $url[1] ?? ($_GET["param"] ?? "home");
@@ -56,6 +59,11 @@ $routes = array(
 
     "gestorLoja" => [
         "home" => "app/views/pages/pgGestorLoja.php",
+        ],
+        
+    "colaborador" => [
+        "home" => "app/views/pages/pgBemVindo.php",
+        "ordem-compra" => "app/views/pages/pgOrdemCompra.php",
     ],
 
     "api" => [
@@ -83,6 +91,8 @@ $routes = array(
         "load-list-departamento-slc" => "app/functions/getLoadListDepartamento.php",
         "load-list-cargo-slc" => "app/functions/getLoadListCargo.php",
 
+        "load-list-nivel-slc" => "app/functions/getLoadListNivel.php",
+
         "load-list-utilizador" => "app/functions/getLoadListUtilizador.php",
         "load-list-order-comrpa" => "app/functions/getLodListOrdemCompra.php",
         "get-dados-order-compra" => "app/functions/getDadosOrdemCompra.php",
@@ -90,6 +100,15 @@ $routes = array(
         "get-search-dados-fornecedor" => "app/functions/getSearchDadosFonecedor.php",
 
         "crud-order-compra" => "app/functions/crudOrderCompra.php",
+
+        //fornecedor
+        "get-load-list-fornecedor" => "app/functions/getLoadListFornecedor.php",
+
+        "crud-utilizador" => "app/functions/crudUtilizador.php",
+
+        "get-login-existe" => "app/functions/getLoginExiste.php",
+
+        "enviar-email" => "app/functions/setEnviarEmail.php",
     ],
 
     "modal" => [
@@ -102,6 +121,7 @@ $routes = array(
 
         "modal-utilizador" => "app/views/modal/modalUtilizador.php",
         "modal-order-compra" => "app/views/modal/modalOrdemCompra.php",
+        "modal-list-fornecedor" => "app/views/modal/modalListFornecedor.php",
     ],
 );
 

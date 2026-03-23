@@ -19,15 +19,15 @@
 
             // Configurações do servidor SMTP
             $this->mailer->isSMTP();
-            $this->mailer->Host       = 'mail.sevirdor smtp'; // Servidor SMTP
+            $this->mailer->Host       = 'mail.guepardoentregas.pt'; // Servidor SMTP
             $this->mailer->SMTPAuth   = true;
-            $this->mailer->Username   = 'email@email.com'; // E-mail fixo do remetente
-            $this->mailer->Password   = 'senha';            // Senha do e-mail fixo
+            $this->mailer->Username   = 'contacto@guepardoentregas.pt'; // E-mail fixo do remetente
+            $this->mailer->Password   = 'o4G$kdF@y$';            // Senha do e-mail fixo
             $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mailer->Port       = 587;
     
             // Configurações do remetente
-            $this->mailer->setFrom('email@email.com', 'Nome da empresa');
+            $this->mailer->setFrom('contacto@guepardoentregas.pt', 'GFeira');
         }
     
         public function enviar($destinatario, $nomeDestinatario, $assunto, $mensagemHTML, $mensagemTexto = '', $anexos = []) {
@@ -60,12 +60,12 @@
                 $this->mailer->send();
                 return [
                         "sucesso" => true, 
-                        "mensagem" => "Email enviado com sucesso"
+                        "msg" => "Email enviado com sucesso"
                     ];
             } catch (Exception $e) {
                 return [
                         "sucesso" => false,
-                        "mensagem" => "Erro ao enviar e-mail: {$this->mailer->ErrorInfo}"
+                        "msg" => "Erro ao enviar e-mail: {$this->mailer->ErrorInfo}"
                     ];
             }
         }

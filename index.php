@@ -30,15 +30,16 @@ verificarSessaoFixa(28800);
     <link rel="stylesheet" href="public/assets/css/style.css?v=<?= VERSION ?>">
     <link rel="stylesheet" href="public/assets/css/spinner.css?v=<?= VERSION ?>">
     <link rel="stylesheet" href="public/assets/css/msgBox.css?v=<?= VERSION ?>">
+    <link rel="stylesheet" href="public/assets/css/cookie.css?v=<?= VERSION ?>">
 </head>
 <body>
 
     
-        <?php
-            if($urlAtual != 'login'){
-                require_once "app/views/pages/pgFilterLateral.php";
-                } 
-        ?>
+    <?php
+        if($urlAtual != 'login' && $urlAtual != "home"){
+            require_once "app/views/pages/pgFilterLateral.php";
+        } 
+    ?>  
     
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -49,10 +50,22 @@ verificarSessaoFixa(28800);
         <div id="modal-container"></div>
         <div id="modalSub-container"></div>
 
+       
+
         <div class="loader-overlay active" id="loaderSpinner">
             <div class="loader-spinner"></div>
             <div class="loader-text">A processar o seu pedido...</div>
             <div class="loader-subtext">Aguarde estamos fazendo o nosso melhor.</div>
+        </div>
+
+        <div id="cookie-banner" class="cookie-container">
+            <div class="cookie-content">
+                <p>Utilizamos cookies para melhorar a sua experiência no site. Ao continuar a navegar, aceita a nossa política de <a href="/">privacidade</a>.</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies" class="btn-cookie accept">Aceitar Tudo</button>
+                    <button id="reject-cookies" class="btn-cookie reject">Recusar</button>
+                </div>
+            </div>
         </div>
         
         <?php include_once "app/router/router.php"; ?>

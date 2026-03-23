@@ -26,7 +26,7 @@ body {
         flex-direction: column;
     }
 
-    .main-content {
+    body:has(.sidebar-desktop) .main-content {
         margin-left: var(--sidebar-width);
         width: calc(100% - var(--sidebar-width));
     }
@@ -72,7 +72,7 @@ body {
 }
 
 /* Estilo dos Inputs (Guepardo Pattern) */
-.CampoGroup {
+/* .CampoGroup {
     position: relative;
     margin-bottom: 1rem;
 }
@@ -86,14 +86,14 @@ body {
     font-size: 0.75rem;
     color: #888;
     font-weight: 600;
-}
+} */
 
-.form-control,
+/* .form-control,
 .form-select {
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     padding: 10px 15px;
-}
+} */
 
 /* Item de Anexo */
 .anexo-item:hover {

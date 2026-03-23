@@ -111,7 +111,7 @@
             </div>
     
             <div id="divSubmit">
-                <button type="button" id="btnLogin" class="width100 btn btn-primary">Entrar</button>
+                <button type="button" id="btnLogin" class="w-100 btn btn-primary">Entrar</button>
             </div>
         </div>
         

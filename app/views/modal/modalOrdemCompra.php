@@ -13,15 +13,15 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <div class="CampoGroup shadow-sm">
+                            <div class="form-floating shadow-sm">
                                 <input type="text" id="txtNumberOrder" class="form-control" placeholder="" disabled>
                                 <label class="fw-bold text-muted">Nº da Order</label>
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
-                            <div class="CampoGroup active shadow-sm">
-                                <select class="form-select border-0" id="slcPrioridade">
+                            <div class="form-floating shadow-sm">
+                                <select class="form-select border-success" id="slcPrioridade">
                                     <option value="1" selected>Baixa</option>
                                     <option value="2">Média</option>
                                     <option value="3">Alta</option>
@@ -41,20 +41,20 @@
                                     <div class="accordion-body">
                                         <div class="row g-3">
                                             <div class="col-12">
-                                                <div class="CampoGroup">
-                                                    <input type="text" id="txtColaborador" class="form-control border-0 bg-light" placeholder="">
+                                                <div class="form-floating">
+                                                    <input type="text" id="txtColaborador" class="form-control" placeholder="">
                                                     <label>Colaborador</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="CampoGroup">
-                                                    <input type="text" id="txtDepartamento" class="form-control border-0 bg-light" placeholder="">
+                                                <div class="form-floating">
+                                                    <input type="text" id="txtDepartamento" class="form-control" placeholder="">
                                                     <label>Departamento</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="CampoGroup">
-                                                    <input type="email" id="txtCargo" class="form-control border-0 bg-light" placeholder="">
+                                                <div class="form-floating">
+                                                    <input type="email" id="txtCargo" class="form-control" placeholder="">
                                                     <label>Cargo</label>
                                                 </div>
                                             </div>
@@ -77,36 +77,36 @@
                                             <div class="col-12">
                                                 <div class="input-group">
                                                     <div class="form-floating">
-                                                        <input type="text" id="txtNomeEmpresa" class="form-control border-0 bg-light" placeholder="" value="1">
+                                                        <input type="text" id="txtNomeEmpresa" class="form-control" placeholder="">
                                                         <label>Nome da empresa</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtSiteEmpresa" class="form-control border-0 bg-light" placeholder="">
+                                                    <input type="text" id="txtSiteEmpresa" class="form-control bg-light" placeholder="">
                                                     <label>Site da empresa</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-7">
                                                 <div class="form-floating">
-                                                    <input type="email" id="txtEmailEmpresa" class="form-control border-0 bg-light" placeholder="">
+                                                    <input type="email" id="txtEmailEmpresa" class="form-control bg-light" placeholder="">
                                                     <label>Email da empresa</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtContactoEmpresa" class="form-control border-0 bg-light" placeholder="">
+                                                    <input type="text" id="txtContactoEmpresa" class="form-control bg-light" placeholder="">
                                                     <label>Contacto</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="email" id="txtTelefoneEmpresa" class="form-control border-0 bg-light" placeholder="">
+                                                    <input type="email" id="txtTelefoneEmpresa" class="form-control bg-light" placeholder="">
                                                     <label>Telefone</label>
                                                 </div>
                                             </div>
-                                            <div class="col-12 mt-0">
+                                            <div class="col-12">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input custom-switch" type="checkbox" id="chkEnviarEmailFornecedor" checked>
                                                     <label class="form-check-label fw-semibold" for="chkEnviarEmailFornecedor">Enviar email automático ao fornecedor após aprovação</label>
@@ -130,21 +130,86 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtNOrcamento" class="form-control border-0 bg-light">
+                                                    <input type="text" id="txtNOrcamento" class="form-control" placeholder="">
                                                     <label>Nº do orçamento</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6" id="containerValor">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtValorNota" class="form-control border-0 bg-light" value="324343">
+                                                    <input type="text" id="txtValorNota" class="form-control" placeholder="">
                                                     <label>Valor da nota (€)</label>
                                                 </div>
                                             </div>
 
+
+                                            <!-- <div class="card border-0 shadow-sm rounded-4 p-4 bg-light" id="containerFile">
+                                                <div class="mb-4">
+                                                    <h6 class="text-uppercase text-muted fw-bold small mb-3 d-flex align-items-center">
+                                                        <i class="bi bi-cash-stack me-2 text-warning"></i> Ficheiros de Orçamento
+                                                    </h6>
+                                                    <div class="d-flex gap-3 flex-wrap" id="containerGroupFileOrcamento">
+                                                        <div class="anexo-item d-inline-flex align-items-center p-2 rounded-3 border bg-white shadow-sm hover-shadow" style="width: 240px; cursor: pointer; border-left: 4px solid #ffc107 !important;">
+                                                            <div class="icon-anexo me-2 d-flex align-items-center justify-content-center bg-warning-subtle rounded" style="width: 40px; height: 40px;">
+                                                                <i class="bi bi-file-earmark-pdf text-warning fs-5"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <p class="mb-0 fw-bold text-dark" style="font-size: 0.8rem;">ORC_26030035</p>
+                                                                <small class="text-muted" style="font-size: 0.7rem;">Orçamento Externo</small>
+                                                            </div>
+                                                            <button class="btn btn-sm btn-light border-0"><i class="bi bi-download"></i></button>
+                                                        </div>
+
+                                                        <div class="anexo-item d-inline-flex align-items-center p-2 rounded-3 border bg-white shadow-sm hover-shadow" style="width: 240px; cursor: pointer; border-left: 4px solid #ffc107 !important;">
+                                                            <div class="icon-anexo me-2 d-flex align-items-center justify-content-center bg-warning-subtle rounded" style="width: 40px; height: 40px;">
+                                                                <i class="bi bi-file-earmark-pdf text-warning fs-5"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <p class="mb-0 fw-bold text-dark" style="font-size: 0.8rem;">ORC_26030035</p>
+                                                                <small class="text-muted" style="font-size: 0.7rem;">Orçamento Externo</small>
+                                                            </div>
+                                                            <button class="btn btn-sm btn-light border-0"><i class="bi bi-download"></i></button>
+                                                        </div>
+
+                                                        <div class="anexo-item d-inline-flex align-items-center p-2 rounded-3 border bg-white shadow-sm hover-shadow" style="width: 240px; cursor: pointer; border-left: 4px solid #ffc107 !important;">
+                                                            <div class="icon-anexo me-2 d-flex align-items-center justify-content-center bg-warning-subtle rounded" style="width: 40px; height: 40px;">
+                                                                <i class="bi bi-file-earmark-pdf text-warning fs-5"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <p class="mb-0 fw-bold text-dark" style="font-size: 0.8rem;">ORC_26030035</p>
+                                                                <small class="text-muted" style="font-size: 0.7rem;">Orçamento Externo</small>
+                                                            </div>
+                                                            <button class="btn btn-sm btn-light border-0"><i class="bi bi-download"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+
+                                                <hr class="my-3 opacity-25">
+
+                                                <div>
+                                                    <h6 class="text-uppercase text-muted fw-bold small mb-3 d-flex align-items-center">
+                                                        <i class="bi bi-shield-lock me-2 text-primary"></i> Documentos Internos
+                                                    </h6>
+                                                    <div class="d-flex gap-3 flex-wrap">
+                                                        <div class="anexo-item d-inline-flex align-items-center p-2 rounded-3 border bg-white shadow-sm hover-shadow" style="width: 240px; cursor: pointer; border-left: 4px solid var(--azul-claro) !important;">
+                                                            <div class="icon-anexo me-2 d-flex align-items-center justify-content-center bg-primary-subtle rounded" style="width: 40px; height: 40px;">
+                                                                <i class="bi bi-file-earmark-text text-primary fs-5"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <p class="mb-0 fw-bold text-dark" style="font-size: 0.8rem;">INT_26030035</p>
+                                                                <small class="text-muted" style="font-size: 0.7rem;">Uso Administrativo</small>
+                                                            </div>
+                                                            <button class="btn btn-sm btn-light border-0"><i class="bi bi-download"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+
                                             <div class="col-12">
                                                 <div class="form-floating">
-                                                    <textarea class="form-control border-0 bg-light" id="txtDescricaoCurta" style="min-height: 80px">texto curto</textarea>
+                                                    <textarea class="form-control" id="txtDescricaoCurta" style="min-height: 80px"  placeholder=""></textarea>
                                                     <label>Descrição do item</label>
                                                     <div class="d-flex justify-content-between mt-1">
                                                         <small class="text-muted">Mínimo 10 caracteres</small>
@@ -153,7 +218,7 @@
                                             </div>
                                             <div class="col-12 mt-3">
                                                 <div class="form-floating">
-                                                    <textarea class="form-control border-0 bg-light" id="txtDescricaoLonga" style="min-height: 120px">texto longo</textarea>
+                                                    <textarea class="form-control" id="txtDescricaoLonga" style="min-height: 120px" placeholder=""></textarea>
                                                     <label>Descrição do serviço/validação</label>
                                                     <small class="text-muted">Mínimo 20 caracteres. Inclua links se necessário.</small>
                                                 </div>
@@ -177,7 +242,7 @@
                             
                             <?php
                                 if(in_array($_SESSION["classeAgente"], [1])){
-                                    echo "<button type='button' id='btnValidar' class='btn btn-outline-success px-4' style='border-radius: 8px;'>Validar</button>";
+                                    echo "<button type='button' id='btnValidar' class='btn btn-success px-4' style='border-radius: 8px;'>Validar</button>";
                                 }
 
                                 if(in_array($_SESSION["classeAgente"], [1])){

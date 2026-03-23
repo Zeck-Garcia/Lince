@@ -1,6 +1,4 @@
-
-
-<div class="bodyPage">
+<div class="bodyPage p-3">
     <div class="groupBody">
         <h3><strong>Bem-vindo ao Lince</strong></h3>
 

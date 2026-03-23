@@ -16,9 +16,11 @@
     $dados = $auth->validar($usuario, $senha);
 
     if ($dados) {
-        $_SESSION['idAgente']     = $dados['idUser'];
+        $_SESSION['idAgente']     = $dados['idLogin'];
         $_SESSION['nomeAgente']   = $dados['nomeUser'];
         $_SESSION['classeAgente'] = $dados['classeUser'];
+        $_SESSION['slugClasseAgente'] = $dados['slugClasse'];
+        $_SESSION['nomeClasseAgente'] = $dados['nomeClasse'];
         $_SESSION['logado']       = true;
 
         $_SESSION['sessao_criada_em'] = time();
