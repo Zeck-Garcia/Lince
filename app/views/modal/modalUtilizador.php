@@ -118,22 +118,29 @@
                                 <div id="collapseUtilizador" class="accordion-collapse collapse show" data-bs-parent="#containerDadosUser">
                                     <div class="accordion-body">
                                         <div class="row g-3">
-                                            <div class="col-6">
+                                            <div class="col-md-3">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtNomeColaborador" class="form-control border-0 bg-light" placeholder="" value="sakdada">
+                                                    <input type="text" id="txtNomeColaborador" class="form-control" placeholder="" value="sakdada">
                                                     <label for="txtNomeColaborador">Nome</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtEmailColaborador" class="form-control border-0 bg-light" placeholder="" value="saoisfiosfs">
+                                                    <input type="text" id="txtEmailColaborador" class="form-control" placeholder="" value="saoisfiosfs">
                                                     <label for="txtEmailColaborador">Email</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-floating">
+                                                    <input type="text" id="txtContactoColaborador" class="form-control" placeholder="" value="saoisfiosfs">
+                                                    <label for="txtContactoColaborador">Contacto</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <select id="slcModalDepartamentoColaborador" class="form-select border-0 bg-light" placeholder="">
+                                                    <select id="slcModalDepartamentoColaborador" class="form-select" placeholder="">
                                                         <option value="0">Todas</option>
                                                     </select>
                                                     <label for="slcModalDepartamentoColaborador">Departamento</label>
@@ -142,7 +149,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <select id="slcModalCargoColaborador" class="form-select border-0 bg-light">
+                                                    <select id="slcModalCargoColaborador" class="form-select">
                                                         <option value="0">Todas</option>
                                                     </select>
                                                     <label for="slcModalCargoColaborador">Cargo</label>
@@ -164,29 +171,31 @@
                                 <div id="collapseLogin" class="accordion-collapse collapse show" data-bs-parent="#containerDadosUser">
                                     <div class="accordion-body">
                                         <div class="row g-3">
-                                            <div class="col-7">
-                                                <div class="form-floating">
-                                                    <input type="text" id="txtLoginUser" class="form-control border-0 bg-light" placeholder="" value="sfsdifdg">
-                                                    <label>Login</label>
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <div class="form-floating">
+                                                        <input type="text" id="txtLoginUser" class="form-control" placeholder="" value="sfsdifdg">
+                                                        <label>Login</label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="form-floating">
-                                                    <select id="slcNivelUser" class="form-select border-0 bg-light">
-                                                        <option value="0">Todas</option>
-                                                    </select>
-                                                    <label for="slcNivelUser">Grupo</label>
+                                                <div class="col-md-5">
+                                                    <div class="form-floating">
+                                                        <select id="slcNivelUser" class="form-select">
+                                                            <option value="0">Todas</option>
+                                                        </select>
+                                                        <label for="slcNivelUser">Grupo</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtSenhaUser" class="form-control border-0 bg-light" placeholder="" value="sfibsds">
+                                                    <input type="text" id="txtSenhaUser" class="form-control" placeholder="" value="sfibsds">
                                                     <label>Senha</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtConfirmarSenhaUser" class="form-control border-0 bg-light" placeholder="" value="sfibsds">
+                                                    <input type="text" id="txtConfirmarSenhaUser" class="form-control" placeholder="" value="sfibsds">
                                                     <label>Confirmar Senha</label>
                                                 </div>
                                             </div>

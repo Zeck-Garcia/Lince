@@ -32,9 +32,10 @@
                     <div class="input-group">
                         <div class="form-floating">
                             <input type="text" id="txtSearchUser" class="form-control border-0 bg-light enterPress" placeholder=" ">
-                            <label for="txtSearchUser">Pesquisar por utilizador, departamento, email, ativo ou cargo...</label>
+                            <label for="txtSearchUser">Pesquisar por utilizador, departamento, email, ativo, desativado ou cargo...</label>
                         </div>
-                        <button class="btn btn-info" id="searchOrderCompra" onclick="searchOrderCompra()">
+                        <button class="btn btn-info" id="searchOrderCompra">
+                        <!-- <button class="btn btn-info" id="searchOrderCompra" onclick="searchOrderCompra()"> -->
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
@@ -49,7 +50,7 @@
                 <thead>
                     <tr>
                         <th>Nome Utilizador</th>
-                        <th>Classe</th>
+                        <th>Grupo</th>
                         <th>Email</th>
                         <th>Departamento</th>
                         <th>Cargo</th>

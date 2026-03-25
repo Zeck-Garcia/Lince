@@ -22,6 +22,7 @@ class Formacao{
         $limite = 7;
         $inicio = ($paginaSet * $limite) - $limite;
         $where = "";
+        $param = [];
         if($dadosT["dataDe"] != '' && $dadosT["dataAte"]){
             $where = ' WHERE dataFormacao >= ? AND dataFormacao <= ? ';
         } else {
@@ -55,18 +56,16 @@ class Formacao{
                         SELECT *, (SELECT COUNT(*) FROM result ) AS totalRegistro FROM result ORDER BY idFormacao DESC LIMIT " . $inicio . "," . $limite;
         $sqlFInal = $select . $where . $selectFim;
         
-        $busca = [$dadosT["buscar"]];
         if($dadosT["dataDe"] != ''){
-            $busca =  [$dadosT["dataDe"] , $dadosT["dataAte"]];
+            $param[] = $dadosT["dataDe"];
+            $param[] = $dadosT["dataAte"];
         } else if (in_array((int)($dadosT["action"]),[2,3,4])){
-            $busca = ["%" . $dadosT["buscar"] . "%"];
+            $param[] = "%" . $dadosT["buscar"] . "%";
+        } else if(in_array((int)($dadosT["action"]),[1])){
+            $param[] = $dadosT["buscar"];            
         }
 
-        if($where != ''){
-            $qry = $this->db->buscar($sqlFInal, $busca);
-        } else {
-            $qry = $this->db->buscar($sqlFInal);
-        }
+        $qry = $this->db->buscar($sqlFInal, $param);
 
         $list = [];
         if(count($qry) > 0){

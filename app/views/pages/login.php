@@ -96,17 +96,17 @@
 
         <div id="divSectionLogin">
             <div id="divSectionGroup">
-                <div class="contentLogin">
+                <div class="contentLogin form-floating">
+                    <input class="form-control" id="txtLogin" name="txtLogin" type="text" placeholder="" required>
                     <label class="modal-label" for="txtLogin">Nome</label>
-                    <input class="form-control" id="txtLogin" name="txtLogin" type="text" placeholder="Digite o seu login" required>
                 </div>
     
-                <div class="contentLogin">
-                    <label class="modal-label" for="txtSenha">Senha</label>
-                    <div class="input-group">
-                        <input class="form-control" id="txtSenha" name="txtSenha" type="password" placeholder="Digite a sua senha" required>
-                        <label class="input-group-text"><i class="bi bi-eye" id="showPass"></i></label>
+                <div class="input-group">
+                    <div class="contentLogin form-floating">
+                        <input class="form-control" id="txtSenha" name="txtSenha" type="password" required placeholder="">
+                        <label class="" for="txtSenha">Senha</label>
                     </div>
+                    <button id="showPass" class="input-group-text"><i class="bi bi-eye" id="showPass"></i></button>
                 </div>
             </div>
     

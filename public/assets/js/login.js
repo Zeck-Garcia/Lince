@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let btnLogin = document.querySelector("#btnLogin")
-    let txtLogin = document.querySelector("#txtLogin")
-    let txtSenha = document.querySelector("#txtSenha")
+    let btnLogin = document.getElementById("btnLogin")
+    let txtLogin = document.getElementById("txtLogin")
+    let txtSenha = document.getElementById("txtSenha")
 
     document.addEventListener("keypress", (e) => {
         if (e.key === "Enter") btnLogin.click()
@@ -37,4 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
             msgAlert("alert-danger", "Erro na ligação ao servidor.")
         }
     })
+
+    let showPass = document.getElementById("showPass")
+    if(showPass){
+        showPass.addEventListener("mousedown", ()=>{
+            txtSenha.setAttribute("type", "text")
+        })
+
+        showPass.addEventListener("click", ()=>{
+            txtSenha.setAttribute("type", "text")
+        })
+
+        showPass.addEventListener("mouseout", ()=>{
+            txtSenha.setAttribute("type", "password")
+        })
+    }
 })

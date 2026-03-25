@@ -85,4 +85,30 @@ class Fornecedor{
 
         return $list;
     }
+
+    public function SearchDadosFornecedor(string $id){
+        $busca = str_replace(array("'", '"'), '', trim(strip_tags($id)));
+        $select = "SELECT * FROM tbFornecedor WHERE idFornecedor = ? OR nomeFornecedor LIKE ? ORDER BY tbFornecedor.nomeFornecedor LIMIT 1";
+        $buscaLike = "%" . $busca  . "%";
+        $qry = $this->db->buscar($select, [$busca,$buscaLike]);
+
+        $list = [];
+        if(count($qry) > 0){
+            foreach($qry as $value){
+                $list[] = [
+                    "idFornecedor" => $value["idFornecedor"],
+                    "nomeFornecedor" => $value["nomeFornecedor"],
+                    "siteFornecedor" => $value["siteFornecedor"],
+                    "emailFornecedor" => $value["emailFornecedor"],
+                    "dataCriacaoFornecedor" => $value["dataCriacaoFornecedor"],
+                    "ativoFornecedor" => $value["ativoFornecedor"],
+                    "moradaFornecedor" => $value["moradaFornecedor"],
+                    "contactoFornecedor" => $value["contactoFornecedor"],
+                    "telefoneFornecedor" => $value["telefoneFornecedor"],
+                    "responsavelFornecedor" => $value["responsavelFornecedor"],
+                ]; 
+            }
+        }
+        return $list;
+    }
 }

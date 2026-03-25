@@ -134,6 +134,7 @@ async function passarPaginaOrderCompra(novaPagina){
 async function openModalOrder(id) {
     try {
 
+        loadAwaitAction("show")
         let titleModal = ''
         titleModal = id == '' ? 'Cadastrar nova Ordem de compra' : 'Analise de Ordem de Compra'
         let {modalEl} = await openModal("modal-order-compra", titleModal,1)
@@ -186,6 +187,7 @@ async function openModalOrder(id) {
                 await montarVerOrder(modalEl, id)
             } else { //novo
 
+                await loadListResponsavelSLC("slcResponsavel")
                 //tira os collapse dos accordion
                 modalEl.querySelectorAll(".accordion-collapse").forEach(item=>{
                     item.classList.remove("collapse")
@@ -257,17 +259,42 @@ async function openModalOrder(id) {
                 containerSendFile.classList.add("row", "mt-3", "g-3")
                 containerSendFile.innerHTML = `<div class='col-md-6'><div class="bg-light p-2 rounded">
                                             <input class="form-control form-control-sm" id="txtfileOrcamento" type="file" id="flOrcamento" name="flOrcamento[]" multiple>
-                                            <small class="text-muted d-block mt-1 ms-1"><span class='fw-bold'>Orçamento</span> Caso já tenha um orçamento do fornecedor faça o anexo. O orçamento será enviado em anexo para o fornecedor quando Aprovado caso a opção de envio esteja habilitada.</small>
+                                            <small class="text-muted d-block mt-1 ms-1"><span class='fw-bold'>Orçamento</span> Caso já tenha um orçamento do fornecedor faça o anexo. O orçamento será enviado em anexo para o fornecedor quando Aprovado caso a opção de envio esteja habilitada. <strong>Limite por arquivo 6Mb</strong></small>
                                         </div></div>
 
                                         <div class='col-md-6'><div class="bg-light p-2 rounded">
                                             <input class="form-control form-control-sm" id="txtfileArquivoInterno" type="file" id="txtfileArquivoInterno" name="txtfileArquivoInterno[]" multiple>
-                                            <small class="text-muted d-block mt-1 ms-1"><span class='fw-bold'>Aquivo Interno</span> Caso tenho uma arquivo que ajude na aprovação pode anexar aqui. Esse arquivo será usado internamento</small>
+                                            <small class="text-muted d-block mt-1 ms-1"><span class='fw-bold'>Aquivo Interno</span> Caso tenho uma arquivo que ajude na aprovação pode anexar aqui. Esse arquivo será usado internamento. <strong>Limite por arquivo 6Mb</strong></small>
                                         </div></div>
                                         `
 
                 document.getElementById("containerValor").after(containerSendFile)
                 let txtfileOrcamento = modalEl.querySelector("#txtfileOrcamento")
+                //ver tamanho arquivo
+                if(txtfileOrcamento){
+                    txtfileOrcamento.addEventListener("change",()=>{
+                        let itemFile = txtfileOrcamento.files
+                        for(let i = 0 ; i < itemFile.length; i++){
+                            if(itemFile[i].size > 6291456){
+                                txtfileOrcamento.value = ''
+                                msgAlert("alert-warning", "O arquivo é demasiado grande. Um dos arquivos tem mais de 6Mg.")
+                            }
+                        }
+                    })
+                }
+
+                let txtfileArquivoInterno = modalEl.querySelector("#txtfileArquivoInterno")
+                if(txtfileArquivoInterno){
+                    txtfileArquivoInterno.addEventListener("change",()=>{
+                        let itemFile = txtfileArquivoInterno.files
+                        for(let i = 0 ; i < itemFile.length; i++){
+                            if(itemFile[i].size > 6291456){
+                                txtfileArquivoInterno.value = ''
+                                msgAlert("alert-warning", "O arquivo é demasiado grande. Um dos arquivos tem mais de 6Mg.")
+                            }
+                        }
+                    })
+                }
 
                 let newButtonSearchFornecedor = document.createElement("button")
                 newButtonSearchFornecedor.innerHTML = `<i class="bi bi-search"></i>`
@@ -286,7 +313,9 @@ async function openModalOrder(id) {
                 let listFornecedor = modalEl.querySelector("#listFornecedor")
                 if(listFornecedor){
                     listFornecedor.addEventListener("click", async()=>{
+                        listFornecedor.setAttribute("disabled", true)
                         await monteModalFornecedor(0)
+                        listFornecedor.removeAttribute("disabled")
                     })
                 }
 
@@ -297,8 +326,9 @@ async function openModalOrder(id) {
                     btnSalvarOrder.addEventListener("click", async()=>{
                         let checkVazio = checkVazioOrderCompra(modalEl)
                         if(!checkVazio){
+                            
                             let marCheckEnviarEmail = chkEnviarEmailFornecedor.checked ? 1 : 0
-
+                            btnSalvarOrder.setAttribute("disabled", true)
                             let fileInput = modalEl.querySelector('#txtfileOrcamento')
                             let files = fileInput.files
                         
@@ -314,25 +344,34 @@ async function openModalOrder(id) {
                                     let btnSubModalValida = modal.querySelector("#btnSubModalValida")
                                     if(btnSubModalValida){
                                         btnSubModalValida.addEventListener("click",async ()=>{
+                                            loadAwaitAction("show")
+                                            btnSubModalValida.setAttribute("disabled", true)
                                             await sendSaveOrder(modalEl)
                                             setTimeout(async()=>{
                                                 await monteLoadListOrderCompra(0)
                                             },800)
                                             modal.remove()
+                                            loadAwaitAction("")
                                         })
                                     }
                                 })
                             } else {
+                                loadAwaitAction("show")
                                 await sendSaveOrder(modalEl)
                                 
                                 setTimeout(async()=>{
                                     await monteLoadListOrderCompra(0)
                                 },800)
+                                loadAwaitAction("")
                             }
+                            btnSalvarOrder.removeAttribute("disabled")
                         }
                     })
                 }
+
+                
             }
+            loadAwaitAction("")
         })
     } catch (error) {
         console.log(error)
@@ -441,7 +480,8 @@ async function passarPaginaModalFornecedor(novaPagina){
  */
 async function sendSaveOrder(modalEl) {
     try {
-        loadAwaitAction("show")
+        let slcResponsavel = modalEl.querySelector("#slcResponsavel")
+        let txtNumberOrder = modalEl.querySelector("#txtNumberOrder")
         let slcPrioridade = modalEl.querySelector("#slcPrioridade")
         let txtNomeEmpresa = modalEl.querySelector("#txtNomeEmpresa")
         let txtNOrcamento = modalEl.querySelector("#txtNOrcamento")
@@ -461,13 +501,13 @@ async function sendSaveOrder(modalEl) {
 
         let arquivos = await processarArquivos(files)
         let arquivosInterno = await processarArquivos(filesInterno)
-        let formData = new FormData()
         let dadosGet = {
             action : "salvar",
+            responsavel : slcResponsavel.value,
             pioridade : slcPrioridade.value,
             idFornecedor : txtNomeEmpresa.getAttribute("data-id-fornecedor") ?? 0,
             numeroOrcamento : txtNOrcamento.value,
-            valorNota : txtValorNota.value,
+            valorNota : txtValorNota.value != '' ? txtValorNota.value.replace(/,/g,'.') : txtValorNota.value,
             descricaoCurta : txtDescricaoCurta.value,
             descricaoLonga : txtDescricaoLonga.value,
             enviarEmail : chkEnviarEmailFornecedor.checked ? 1 : 0,
@@ -476,7 +516,6 @@ async function sendSaveOrder(modalEl) {
         }
 
         let result = await CRUDOrderCompra(dadosGet)
-        loadAwaitAction("")
 
         slcPrioridade.setAttribute("disabled", true)
         txtNomeEmpresa.setAttribute("readonly", true)
@@ -493,11 +532,19 @@ async function sendSaveOrder(modalEl) {
         if(result && typeof result == 'object' && result.obj.sucesso){
             if(txtNumberOrder) txtNumberOrder.value = result.obj.result
             if(btnSalvarOrder) btnSalvarOrder.classList.add("d-none")
+
+                let dadosSend = {
+                    action : "interno",
+                    destino : "enviarEmailAdminNovaOrder",
+                    orderCompra : txtNumberOrder.value,
+                }
+
+                await enviarEmail(JSON.stringify(dadosSend))
+                //await enviarSMS(JSON.stringify(dadosSend))
         }
 
         return result
     } catch (error) {
-        loadAwaitAction("")
         console.log(error)
     }
 }
@@ -515,7 +562,7 @@ function checkVazioOrderCompra(mdoal){
         let txtDescricaoCurta = mdoal.querySelector("#txtDescricaoCurta")
         let txtDescricaoLonga = mdoal.querySelector("#txtDescricaoLonga")
         
-        if(txtNomeEmpresa.value == ''){
+        if(txtNomeEmpresa.getAttribute("data-id-fornecedor") == null || txtNomeEmpresa.value == ''){
             txtNomeEmpresa.classList.add("border-danger")
             txtNomeEmpresa.focus()
             msgAlert("alert-warning", "Informe o fornecedor desta Ordem de Compra")
@@ -627,6 +674,7 @@ async function monteDadosFornecedor(modal){
  */
 async function montarVerOrder(modal, id){
     try {
+        let slcResponsavel = modal.querySelector("#slcResponsavel")
         let txtNumberOrder = modal.querySelector("#txtNumberOrder")
         let slcPrioridade = modal.querySelector("#slcPrioridade")
         let txtColaborador = modal.querySelector("#txtColaborador")
@@ -643,6 +691,7 @@ async function montarVerOrder(modal, id){
 
         let containerDadosUser = modal.querySelector("#containerDadosUser")
         containerDadosUser.classList.remove("d-none")
+        slcResponsavel.parentNode.classList.add("d-none")
 
         let dadosGet = {
             paginaSet : 0,
@@ -650,10 +699,10 @@ async function montarVerOrder(modal, id){
         }
 
         let result = await loadListOrderCompra(JSON.stringify(dadosGet))
+        loadAwaitAction("")
 
         if(result && Array.isArray(result.obj) && result.obj.length > 0){
             result.obj.forEach(item=>{
-
                 let regexUrl = /(https?:\/\/[^\s]+)/g
 
                 let urlClick = item.descricaoOrder
@@ -662,11 +711,14 @@ async function montarVerOrder(modal, id){
                 let classeSolicitante = item.classeSolicitanteOrder
                 let idSolicitante = item.idSolicitanteOrder
                 let statusOrder = item.aprovaRejeitaOrder
+                let aprovaRejeitaOrder = item.aprovaRejeitaOrder
 
                 txtNumberOrder.value = item.codOrder
                 txtNumberOrder.setAttribute('data-id-order',item.codOrder)
                 slcPrioridade.value = item.prioriOrder
                 txtColaborador.value = item.nomeUser
+                txtColaborador.setAttribute("data-id-solicitante", item.idSolicitanteOrder)
+                txtColaborador.setAttribute("data-classe-solicitante", item.classeSolicitanteOrder)
                 txtDepartamento.value = item.nomeDepartamento
                 txtCargo.value = item.nomeCargo
                 txtNomeEmpresa.value = item.nomeFornecedor
@@ -698,6 +750,7 @@ async function montarVerOrder(modal, id){
                 txtTelefoneEmpresa.setAttribute("disabled", true)
 
                 let containerAprovação = modal.querySelector("#containerAprovação")
+                let classValide = containerAprovação.getAttribute("data-id-classe")
 
                 let newContainerAprovacao = document.createElement("div")
                 if(newContainerAprovacao){
@@ -720,20 +773,27 @@ async function montarVerOrder(modal, id){
                                                     <div class='form-floating'>
                                                         <textarea class='form-control bg-light' id='txtAprovacaoRejeicao' style='min-height: 120px' ${statusOrder == null ? '' : 'disabled'}  placeholder=''>${item.textoAprovadorOrder || ''}</textarea>
                                                         <label>Texto da Validação</label>
-                                                        <small class='text-muted'>Descreva o motivo do porque está a aprovar ou rejeitar essa Ordem de Compra</small>
+                                                        <small class='text-muted'>${statusOrder == null ? "Descreva o motivo do porque está a aprovar ou rejeitar essa Ordem de Compra" : ""}</small>
                                                     </div>
                                                 </div>
                                             </div>`
 
-                    if(containerAprovação){
-                        containerAprovação.append(newContainerAprovacao)
+                    if(statusOrder == null && classValide == 1){
+                        if(containerAprovação){
+                            containerAprovação.append(newContainerAprovacao)
+                        }
+                    } else if(statusOrder != null){
+                        if(containerAprovação){
+                            containerAprovação.append(newContainerAprovacao)
+                        }
                     }
+
                 }
 
                 let newStatus = document.createElement("div")
                     newStatus.classList.add("col-md-4", "mb-3")
                     newStatus.innerHTML = `<div class="CampoGroup shadow-sm">
-                                <input type="text" id="txtstatus" class="form-control fw-bold text-center" placeholder="" value="${statusOrder == null ? 'Por Aprovar' : statusOrder == 1 ? 'Aprovado' : 'Rejeitado'}" disabled readonly style="${statusOrder == null ? 'background: #ffc107;' : statusOrder == 1 ? 'background: #198754; color: white;' : 'background: #dc3545; color: white;'}">
+                                <input type="text" id="txtstatus" class="form-control fw-bold text-center py-3" placeholder="" value="${statusOrder == null ? 'Por Aprovar' : statusOrder == 1 ? 'Aprovado' : 'Rejeitado'}" disabled readonly style="${statusOrder == null ? 'background: #ffc107;' : statusOrder == 1 ? 'background: #198754; color: white;' : 'background: #dc3545; color: white;'}">
                             </div>`
 
                 txtNumberOrder.parentNode.parentNode.parentNode.insertBefore(newStatus, txtNumberOrder.parentNode.parentNode)
@@ -944,6 +1004,7 @@ async function btnAprovarRejeitar(modal){
         let containerAprovação = modal.querySelector("#containerAprovação")
         let txtstatus = modal.querySelector("#txtstatus")
         let chkEnviarEmailFornecedor = modal.querySelector("#chkEnviarEmailFornecedor")
+        let txtColaborador = modal.querySelector("#txtColaborador")
 
         let btnExcluir = modal.querySelector("#btnExcluir")
         let btnValidar = modal.querySelector("#btnValidar")
@@ -974,6 +1035,7 @@ async function btnAprovarRejeitar(modal){
                 modalConfirme.querySelectorAll(".btnAprovaRejeita").forEach(async item =>{
                     let clickFoiEm = item.value == 'Aprovar' ? 1 : 0
                     item.addEventListener("click",async ()=>{
+                        loadAwaitAction("show")
                         item.setAttribute("disabled" , true)
                         let dados = {
                             action : "aprovar/reprovar",
@@ -1000,7 +1062,18 @@ async function btnAprovarRejeitar(modal){
                             if(clickFoiEm == 1 && chkEnviarEmailFornecedor.checked){
                                 await enviarEmailFornecedor(orderNumber)
                             }
+
+                            let dadosEmail = {
+                                action : "interno",
+                                destino : "emailAprovaRejeitaSolicitante",
+                                orderCompra  : orderNumber,
+                                idSolicitante : txtColaborador.getAttribute("data-id-solicitante"),
+                                classeSolicitante : txtColaborador.getAttribute("data-classe-solicitante"),
+                            }
+
+                            await enviarEmail(JSON.stringify(dadosEmail))
                         }
+                        loadAwaitAction("")
                         item.setAttribute("disabled" , false)
                     })
                 })

@@ -5,6 +5,7 @@ class OrdemCompra{
     private $app;
     private $dataHoje;
     private $fornecedor;
+    private $utilizador;
 
     public function __construct()
     {
@@ -17,8 +18,11 @@ class OrdemCompra{
     public function searchOrderCompraById(int $id){
         $param = [];
         $select = "SELECT * 
-                FROM tbOrderCompra
-                WHERE codOrderCompra=?";
+                    FROM tbOrderCompra oc
+                    LEFT JOIN tbPrioridade pr
+                    ON pr.idPrioridade = oc.prioridadeOrderCompra
+
+                    WHERE codOrderCompra=?";
         $param[] = $id;
 
         $qry = $this->db->buscar($select, $param);
@@ -31,6 +35,7 @@ class OrdemCompra{
                     "codOrder" => $value["codOrderCompra"],
                     "numeroOrcamento" => $value["numeroOrcamentoOrderCompra"],
                     "dataCriacao" => $value["dataCriacaoOrderCompra"],
+                    "nomeprioridade" => $value["nomePrioridade"],
                     "Prioridade" => $value["prioridadeOrderCompra"],
                     "idSolicitante" => $value["idSolicitanteOrderCompra"],
                     "classeSolicitante" => $value["classeSolicitanteOrderCompra"],
@@ -43,7 +48,8 @@ class OrdemCompra{
                     "dataAprovacao" => $value["dataAprovacaoOrderCompra"],
                     "idProvador" => $value["idAprovadorOrderCompra"],
                     "textoAprovador" => $value["textoAprovadorOrderCompra"],
-                    "aprovadoRejeitado" => $value["aprovadoRejeitadoOrderCompra"]
+                    "aprovadoRejeitado" => $value["aprovadoRejeitadoOrderCompra"],
+                    "idAdminResponsavel" => $value["idAdminResponsavel"],
                 ];
             }
         }
@@ -101,6 +107,11 @@ class OrdemCompra{
             $param[] = $_SESSION["idAgente"];
         }
 
+        if($_SESSION["classeAgente"] == 1 && isset($dadosT["idOrder"]) && $dadosT["idOrder"] == ''){
+            $where .= " AND idAdminResponsavel=? OR idAdminResponsavel=0";
+            $param[] = $_SESSION["idAgente"];
+        }
+
         $select = "WITH result AS (SELECT oc.*, si.nomeUserDados AS nomeSi, si.idUserDados as idSi, si.departamentoUserDados as dpSi, si.cargoUserDados AS cargoSi, si.classeUserDados AS classeSi, si.emailUserDados AS emailSi, siA.*, dp.*, ca.*, cl.*, fo.*, pr.*
                     FROM tbOrderCompra oc 
                     
@@ -142,7 +153,7 @@ class OrdemCompra{
                     "idOrder" => $value["idOrderCompra"],
                     "destinoOrder" => $value["destinoOrderCompra"],
                     "codOrder" => $value["codOrderCompra"],
-                    "numeroOrcamentoOrder" => $value["numeroOrçamentoOrderCompra"],
+                    "numeroOrcamentoOrder" => $value["numeroOrcamentoOrderCompra"],
                     "dataOrder" => $value["dataCriacaoOrderCompra"],
                     "prioriOrder" => $value["prioridadeOrderCompra"],
                     "nomePrioriOrder" => $value["nomePrioridade"],
@@ -193,7 +204,7 @@ class OrdemCompra{
                     //adm
                     "userSistema" => $value["nomeUserDados"],
                     //list arquivo
-                    "arquivos" => $this->app->searchListArquivo($numeroOrder),
+                    "arquivos" => $this->app->searchListArquivo($numeroOrder,0),
                     "limite" => $limite,
                     "totalRegistro" => $value["totalRegistro"],
                 ];
@@ -240,10 +251,11 @@ class OrdemCompra{
                     "emailEnviadoAoFornecedorOrderCompra" => $dadosT["enviarEmail"],
                     "arquivos" => $arquivosOrcamento,
                     "arquivosInterno" => $arquivosInterno,
+                    "responsavel" => $dadosT["responsavel"],
                 ];
                 
                 $result = $this->salvarOrderCompra($dadosSend);
-                return ["sucesso" => $result["sucesso"], "msg" => $result["msg"]];
+                return ["sucesso" => $result["sucesso"], "msg" => $result["msg"], "result" => $result["result"]];
                 break;
                 
             case "excluir":
@@ -279,6 +291,11 @@ class OrdemCompra{
 
     private function salvearquivosDB($file, $numerOrder, $tipo){
         if($numerOrder == '') return ["sucesso" => false, "msg" => "O número da Ordem de Compra está vazia por algum motivo"];
+
+        // $finfo = new finfo(FILEINFO_MIME_TYPE);
+        // $mime = $finfo->file($file);
+
+        // $this->app->getMimeType($mime);
 
         $totalFicheiros = count($file);
         $result = [];
@@ -439,6 +456,7 @@ class OrdemCompra{
             $descricaoItemOrderCompra = $dados["descricaoItemOrderCompra"];
             $descricaoOrderOrderCompra = $dados["descricaoOrderOrderCompra"];
             $emailEnviadoAoFornecedorOrderCompra = $dados["emailEnviadoAoFornecedorOrderCompra"];
+            $responsavel = $dados["responsavel"];
             $select = "INSERT INTO tbOrderCompra
                                     (destinoOrderCompra,
                                     codOrderCompra,
@@ -451,8 +469,9 @@ class OrdemCompra{
                                     valorNotaOrderCompra,
                                     descricaoItemOrderCompra,
                                     descricaoOrderOrderCompra,
-                                    enviarEmailOrderCompra) 
-                                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                                    enviarEmailOrderCompra,
+                                    idAdminResponsavel) 
+                                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $qry = $this->db->executarSQL($select, [
                 $destinoOrderCompra,
                 $codOrderCompra,
@@ -465,7 +484,8 @@ class OrdemCompra{
                 $valorNotaOrderCompra,
                 $descricaoItemOrderCompra,
                 $descricaoOrderOrderCompra,
-                $emailEnviadoAoFornecedorOrderCompra
+                $emailEnviadoAoFornecedorOrderCompra,
+                $responsavel
             ]);
     
             if($qry->rowCount() >= 0){
@@ -553,4 +573,6 @@ class OrdemCompra{
             "msg" => "Houve um erro ao executar essa ação tente novamente",
         ];
     }
+
+    
 }

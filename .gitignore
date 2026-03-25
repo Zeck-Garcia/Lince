@@ -1,3 +1,5 @@
 /novo estudo
 /novo layout
 atualizacao_table
+/app/controllers/class/ConfigMsgSMS.php
+/app/controllers/class/ConfigEmail.php

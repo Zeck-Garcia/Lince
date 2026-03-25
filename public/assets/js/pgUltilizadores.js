@@ -9,15 +9,29 @@ if(slcDepartamento){
         if(slcDepartamento.value != 0){
             await loadListCargoSLC("slcCargo",slcDepartamento.value)
             ///chamar para montar a tabela
-
+            await montetableListUtilizador(1)
         }
+    })
+}
+
+let slcCargo = document.getElementById("slcCargo")
+if(slcCargo){
+    slcCargo.addEventListener("change",async()=>{
+        await montetableListUtilizador(1)
+    })
+}
+
+let searchOrderCompra = document.getElementById("searchOrderCompra")
+if(searchOrderCompra){
+    searchOrderCompra.addEventListener("click", async()=>{
+        await montetableListUtilizador(1)
     })
 }
 
 let btnProcurar = document.getElementById("btnProcurar")
 if(btnProcurar){
     btnProcurar.addEventListener("click", async()=>{
-        await montetableListUtilizador(0)
+        await montetableListUtilizador(1)
     })
 }
 
@@ -65,8 +79,8 @@ async function montetableListUtilizador(pagina) {
         tbodyList.append(newTr)
     }
 
-    let limite = result.obj.length > 0 ? result.obj[0]['limite'] : 0
-    let totalRegisto = result.obj.length > 0 ? result.obj[0]['totalRegistro'] : 0
+    let limite = result.obj && result.obj.length > 0 ? result.obj[0]['limite'] : 0
+    let totalRegisto = result.obj && result.obj.length > 0 ? result.obj[0]['totalRegistro'] : 0
     pagination(totalRegisto, limite, pagina, 'paginador', 'passarPaginaUtilizador')
 
     } catch (error) {
@@ -99,6 +113,7 @@ async function openModalUtilizador(id,rowsList){
         let slcNivelUser = modalEl.querySelector("#slcNivelUser")
         let txtSenhaUser = modalEl.querySelector("#txtSenhaUser")
         let btnValidar = modalEl.querySelector("#btnValidar")
+        let chkReceberOrder = modalEl.querySelector("#chkReceberOrder")
         
         await loadListNivelSLC("slcNivelUser")
         await loadListDepartamentoSLC("slcModalDepartamentoColaborador")
@@ -116,6 +131,7 @@ async function openModalUtilizador(id,rowsList){
             }
         } else {
             if(btnValidar){
+                await montechkBoxReceberOrder(modalEl,0)
                 btnValidar.addEventListener("click",async()=>{
                     if(!checkVazioUtilizador(modalEl,1)){
                         if(!checkSenha(modalEl)){
@@ -136,12 +152,15 @@ async function openModalUtilizador(id,rowsList){
                                     email : txtEmailColaborador.value,
                                     login : txtLoginUser.value,
                                     senha : txtSenhaUser.value,
+                                    chkReceberOrder : chkReceberOrder && chkReceberOrder.checked ? 1 : 0 
                                 }
                                 //chamar o crud
                                 let result = await CRUDUtillizador(JSON.stringify(dados))
     
                                 if(result && typeof result == 'object' && result.obj.sucesso){
                                     btnValidar.classList.add("d-none")
+                                    //aqui
+                                    await montetableListUtilizador(1) 
                                 }
                             } else {
                                 txtLoginUser.classList.remove("border-0")
@@ -154,6 +173,46 @@ async function openModalUtilizador(id,rowsList){
                     }
                 })
             }                
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function montechkBoxReceberOrder(modal, monte){
+    try {
+        if(modal.querySelector("#containerResposanvel")){
+            modal.querySelector("#containerResposanvel").remove()
+        }
+        let slcNivelUser = modal.querySelector("#slcNivelUser")
+        if(slcNivelUser){
+            slcNivelUser.addEventListener("change",async()=>{
+                if(modal.querySelector("#containerResposanvel")){
+                    modal.querySelector("#containerResposanvel").remove()
+                }
+                if(modal.querySelector("#containerResposanvel")){
+                    modal.querySelector("#containerResposanvel").remove()
+                }
+                if(slcNivelUser.value == 1){
+                    let newItem = document.createElement("div")
+                    newItem.id = "containerResposanvel"
+                    newItem.classList.add('form-check','form-switch','ms-3','mt-2')
+                    newItem.innerHTML = `<input class="form-check-input custom-switch" type="checkbox" id="chkReceberOrder">
+                                        <label class="form-check-label fw-semibold" for="chkReceberOrder">Este utilizador deve receber Ordem de Compra para validação</label>`
+
+                    slcNivelUser.parentNode.parentNode.parentNode.append(newItem)
+                }
+            })
+        } 
+        
+        if(monte == 1){
+            let newItem = document.createElement("div")
+                newItem.id = "containerResposanvel"
+                newItem.classList.add('form-check','form-switch','ms-3','mt-2')
+                newItem.innerHTML = `<input class="form-check-input custom-switch" type="checkbox" id="chkReceberOrder">
+                                    <label class="form-check-label fw-semibold" for="chkReceberOrder">Este utilizador deve receber Ordem de Compra para validação</label>`
+
+                slcNivelUser.parentNode.parentNode.parentNode.append(newItem)
         }
     } catch (error) {
         console.log(error)
@@ -179,6 +238,7 @@ async function montarVerUtilizador(modal, id){
     try {
         let txtNomeColaborador = modal.querySelector("#txtNomeColaborador")
         let txtEmailColaborador = modal.querySelector("#txtEmailColaborador")
+        let txtContactoColaborador = modal.querySelector("#txtContactoColaborador")
         let slcModalDepartamentoColaborador = modal.querySelector("#slcModalDepartamentoColaborador")
         let slcModalCargoColaborador = modal.querySelector("#slcModalCargoColaborador")
         let txtLoginUser = modal.querySelector("#txtLoginUser")
@@ -213,7 +273,6 @@ async function montarVerUtilizador(modal, id){
 
                 btnCloseModalUtilizador.addEventListener("click", async (e)=>{
                     e.preventDefault()
-                    console.log(btnValidar.getAttribute("data-valide"))
                     if(!btnValidar.getAttribute("data-valide")){
                         await verAlteracao(result.obj)
                     } else {
@@ -230,6 +289,7 @@ async function montarVerUtilizador(modal, id){
 
                 txtNomeColaborador.value = item.nome
                 txtEmailColaborador.value = item.email
+                txtContactoColaborador.value = item.contacto
                 slcModalDepartamentoColaborador.value = item.idDepartamento
                 slcModalCargoColaborador.value = item.idCargo
                 txtLoginUser.value = item.login
@@ -237,12 +297,11 @@ async function montarVerUtilizador(modal, id){
                 chkAtivo.checked = item.ativo == 1 ? true : false  
                 txtSenhaUser.value = ''
                 txtConfirmarSenhaUser.value = ''
+                await montechkBoxReceberOrder(modal, item.idClasse == 1 ? 1 : 0)
+                let chkReceberOrder = containerDadosLogin.querySelector("#chkReceberOrder")
+                chkReceberOrder.checked = item.receberOrderCompra == 1 ? true : false
             })
-
             txtLoginUser.setAttribute("disabled", true)
-
-        } else {
-            //ver se coloca a mensagem de user nao encontrado
         }
 
         if(btnValidar){
@@ -250,6 +309,7 @@ async function montarVerUtilizador(modal, id){
             btnValidar.classList.remove("btn-success")
             btnValidar.classList.add("btn-warning")
             btnValidar.addEventListener("click", async()=>{
+                let chkReceberOrder = containerDadosLogin.querySelector("#chkReceberOrder")
                 if(!checkVazioUtilizador(modal,0)){
                     if(!checkSenha(modal)){
                         let dados = {
@@ -261,9 +321,11 @@ async function montarVerUtilizador(modal, id){
                             cargo : slcModalCargoColaborador.value,
                             classe : slcNivelUser.value,
                             email : txtEmailColaborador.value,
+                            contacto : txtContactoColaborador.value,
                             login : txtLoginUser.value,
                             senha : txtSenhaUser.value,
-                            ativo : chkAtivo.checked ? 1 : 0
+                            ativo : chkAtivo.checked ? 1 : 0,
+                            chkReceberOrder : chkReceberOrder && chkReceberOrder.checked ? 1 : 0,
                         }
 
                         let resultCrud = await CRUDUtillizador(JSON.stringify(dados))
@@ -271,6 +333,7 @@ async function montarVerUtilizador(modal, id){
                         if(resultCrud && typeof resultCrud == 'object' && resultCrud.obj.sucesso){
                             txtNomeColaborador.setAttribute("readonly",true)
                             txtEmailColaborador.setAttribute("readonly",true)
+                            txtContactoColaborador.setAttribute("readonly",true)
                             slcModalDepartamentoColaborador.setAttribute("disabled",true)
                             slcModalCargoColaborador.setAttribute("disabled",true)
                             txtLoginUser.setAttribute("readonly",true)
@@ -280,7 +343,7 @@ async function montarVerUtilizador(modal, id){
                             btnValidar.classList.add("d-none")
                             btnValidar.setAttribute("data-valide", true)
                             setTimeout(async()=>{
-                                await montetableListUtilizador(0)
+                                await montetableListUtilizador(1)
                             },800)
                         }
                         //crud editar
@@ -328,9 +391,11 @@ async function montarVerUtilizador(modal, id){
                                         cargo : slcModalCargoColaborador.value,
                                         classe : slcNivelUser.value,
                                         email : txtEmailColaborador.value,
+                                        contacto : txtContactoColaborador.value,
                                         login : txtLoginUser.value,
                                         senha : txtSenhaUser.value,
-                                        ativo : chkAtivo.checked ? 1 : 0
+                                        ativo : chkAtivo.checked ? 1 : 0,
+                                        chkReceberOrder : chkReceberOrder && chkReceberOrder.checked ? 1 : 0,
                                     }
 
                                     let resultCrud = await CRUDUtillizador(JSON.stringify(dados))
@@ -338,6 +403,7 @@ async function montarVerUtilizador(modal, id){
                                     if(resultCrud && typeof resultCrud == 'object' && resultCrud.obj.sucesso){
                                         txtNomeColaborador.setAttribute("readonly",true)
                                         txtEmailColaborador.setAttribute("readonly",true)
+                                        txtContactoColaborador.setAttribute("readonly",true)
                                         slcModalDepartamentoColaborador.setAttribute("disabled",true)
                                         slcModalCargoColaborador.setAttribute("disabled",true)
                                         txtLoginUser.setAttribute("readonly",true)
@@ -347,9 +413,8 @@ async function montarVerUtilizador(modal, id){
                                         btnValidar.classList.add("d-none")
                                         btnValidar.setAttribute("data-valide", true)
                                         setTimeout(async()=>{
-                                            await montetableListUtilizador(0)
+                                            await montetableListUtilizador(1)
                                         },800)
-
                                     }
                                     //chamar o crud
                                 }
@@ -374,6 +439,7 @@ function checkVazioUtilizador(modal, action){
     try {
         let txtNomeColaborador = modal.querySelector("#txtNomeColaborador")
         let txtEmailColaborador = modal.querySelector("#txtEmailColaborador")
+        let txtContactoColaborador = modal.querySelector("#txtContactoColaborador")
         let slcModalDepartamentoColaborador = modal.querySelector("#slcModalDepartamentoColaborador")
         let slcModalCargoColaborador = modal.querySelector("#slcModalCargoColaborador")
         let txtLoginUser = modal.querySelector("#txtLoginUser")
@@ -382,92 +448,87 @@ function checkVazioUtilizador(modal, action){
         let txtConfirmarSenhaUser = modal.querySelector("#txtConfirmarSenhaUser")
 
         if(txtNomeColaborador.value == ''){
-            txtNomeColaborador.classList.remove("border-0")
-            txtNomeColaborador.classList.add("border", "border-danger")
+            txtNomeColaborador.classList.add("border-danger")
             txtNomeColaborador.focus()
             msgAlert("alert-warning", "Informe o nome do Utilizador do sistema")
             return true 
         } else {
-            txtNomeColaborador.classList.add("border-0")
-            txtNomeColaborador.classList.remove("border", "border-danger")
-        }
-
-        if(txtEmailColaborador.value == ''){
-            txtEmailColaborador.classList.remove("border-0")
-            txtEmailColaborador.classList.add("border", "border-danger")
-            txtEmailColaborador.focus()
-            msgAlert("alert-warning", "Qual o email o utilizador")
-            return true 
-        } else {
-            txtEmailColaborador.classList.add("border-0")
-            txtEmailColaborador.classList.remove("border", "border-danger")
+            txtNomeColaborador.classList.remove("border-danger")
         }
 
         if(slcModalDepartamentoColaborador.value == 0){
-            slcModalDepartamentoColaborador.classList.remove("border-0")
-            slcModalDepartamentoColaborador.classList.add("border", "border-danger")
+            slcModalDepartamentoColaborador.classList.add("border-danger")
             slcModalDepartamentoColaborador.focus()
             msgAlert("alert-warning", "Escolha um departamento")
             return true 
         } else {
-            slcModalDepartamentoColaborador.classList.add("border-0")
-            slcModalDepartamentoColaborador.classList.remove("border", "border-danger")
+            slcModalDepartamentoColaborador.classList.remove("border-danger")
         }
 
         if(slcModalCargoColaborador.value == 0){
-            slcModalCargoColaborador.classList.remove("border-0")
-            slcModalCargoColaborador.classList.add("border", "border-danger")
+            slcModalCargoColaborador.classList.add("border-danger")
             slcModalCargoColaborador.focus()
             msgAlert("alert-warning", "Agora escolha um cargo")
             return true 
         } else {
-            slcModalCargoColaborador.classList.add("border-0")
-            slcModalCargoColaborador.classList.remove("border", "border-danger")
+            slcModalCargoColaborador.classList.remove("border-danger")
         }
 
         if(txtLoginUser.value == ''){
-            txtLoginUser.classList.remove("border-0")
-            txtLoginUser.classList.add("border", "border-danger")
+            txtLoginUser.classList.add("border-danger")
             txtLoginUser.focus()
             msgAlert("alert-warning", "Informe qual é o login do utilizador")
             return true 
         } else {
-            txtLoginUser.classList.add("border-0")
-            txtLoginUser.classList.remove("border", "border-danger")
+            txtLoginUser.classList.remove("border-danger")
         }
 
-        if(slcNivelUser.value == ''){
-            slcNivelUser.classList.remove("border-0")
-            slcNivelUser.classList.add("border", "border-danger")
+        if(slcNivelUser.value == 0){
+            slcNivelUser.classList.add("border-danger")
             slcNivelUser.focus()
             msgAlert("alert-warning", "Qual o nível de acesso a esse utilizador")
             return true 
         } else {
-            slcNivelUser.classList.add("border-0")
-            slcNivelUser.classList.remove("border", "border-danger")
+            slcNivelUser.classList.remove("border-danger")
+        }
+
+        if(slcNivelUser.value == 1){
+            if(txtEmailColaborador.value == ''){
+                txtEmailColaborador.classList.add("border-danger")
+                txtEmailColaborador.focus()
+                msgAlert("alert-warning", "Qual o email o utilizador")
+                return true 
+            } else {
+                txtEmailColaborador.classList.remove("border-danger")
+            }
+            
+            if(txtContactoColaborador.value == ''){
+                txtContactoColaborador.classList.add("border-danger")
+                txtContactoColaborador.focus()
+                msgAlert("alert-warning", "Qual o email o utilizador")
+                return true 
+            } else {
+                txtContactoColaborador.classList.remove("border-danger")
+            }
         }
 
         if(action == 1){
             if(txtSenhaUser.value == ''){
-                txtSenhaUser.classList.remove("border-0")
-                txtSenhaUser.classList.add("border", "border-danger")
+                txtSenhaUser.classList.add("border-danger")
                 txtSenhaUser.focus()
                 msgAlert("alert-warning", "Escreva ao menos uma senha")
                 return true 
             } else {
-                txtSenhaUser.classList.add("border-0")
-                txtSenhaUser.classList.remove("border", "border-danger")
+                txtSenhaUser.classList.remove("border-danger")
             }
     
             if(txtConfirmarSenhaUser.value == ''){
-                txtConfirmarSenhaUser.classList.remove("border-0")
-                txtConfirmarSenhaUser.classList.add("border", "border-danger")
+                txtConfirmarSenhaUser.classList.add("border-danger")
                 txtConfirmarSenhaUser.focus()
                 msgAlert("alert-warning", "Informe a contra senha")
                 return true 
             } else {
-                txtConfirmarSenhaUser.classList.add("border-0")
-                txtConfirmarSenhaUser.classList.remove("border", "border-danger")
+                txtConfirmarSenhaUser.classList.remove("border-danger")
             }
         }
 
@@ -526,7 +587,7 @@ async function excluirRegistroUtilizador(id, rowsList) {
                         msgAlert("alert-success", result.obj.msg)
                         modal.remove()
                         setTimeout(async()=>{
-                            await montetableListUtilizador(0) 
+                            await montetableListUtilizador(1) 
                         },800)
                     } else {
                         msgAlert("alert-warning", result.obj.msg)

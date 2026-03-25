@@ -32,6 +32,10 @@ $(document).ready(function() {
     $(document).on("input", ".upper-case", function(){
         upperCase(this)
     })
+
+    $(document).on("input", ".number-real", function(){
+        onlyMoney(this)
+    })
 })
 
 //spinner
@@ -856,6 +860,51 @@ async function loadListNivelSLC(select){
                     slcNew.appendChild(newInput)
                 }
             })
+        } else {
+            msgAlert("alert-danger", "Erro no retorno do banco de dados, atualize a página.")
+        }
+    } catch (error) {
+        msgAlert("alert-danger", "Campo de loja não encontrado")
+    }
+}
+
+/**
+ * 
+ * @param {string} select campo a receber a lista de valores 
+ * @returns 
+ */
+async function loadListResponsavelSLC(select){
+    let slcNew = document.getElementById(select)
+    let response = await fetch("api/load-list-responsavel-order-compra-slc", {
+        method : "POST",
+    })
+
+    if(!response.ok) throw new Error("Erro na rede")
+
+    let result = await response.json()
+    slcNew.innerHTML = ""
+
+    let newInputEmpty = document.createElement("option")
+    newInputEmpty.innerHTML = "Selecione"
+    newInputEmpty.value = "0"
+    newInputEmpty.disabled = true
+    newInputEmpty.selected = true
+    slcNew.appendChild(newInputEmpty)
+
+    try {
+        if(result.obj && Array.isArray(result.obj)){
+            if(result.obj.length > 0){
+                result.obj.forEach(item=>{
+                    if(item.ativo == 1){
+                        let newInput = document.createElement("option")
+                        newInput.innerHTML = capitalizar(item.nome)
+                        newInput.value = item.id
+                        slcNew.appendChild(newInput)
+                    }
+                })
+            } else {
+                msgAlert("alert-warning", "Não foi cadastrado nenhum administrador, a Ordem de Compra será visivel para todos os responsável. Não se preocupe que será salva na mesma",20000)
+            }
         } else {
             msgAlert("alert-danger", "Erro no retorno do banco de dados, atualize a página.")
         }

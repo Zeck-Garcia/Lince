@@ -30,6 +30,17 @@
                             </div>
                         </div>
 
+                        <div class="col-md-4 mb-3">
+                            <div class="form-floating shadow-sm">
+                                <select class="form-select" id="slcResponsavel">
+                                    <option value="1" selected></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                </select>
+                                <label class="fw-bold text-muted">Responsável</label>
+                            </div>
+                        </div>
+
                         <div class="accordion mb-3" id="containerDadosUser">
                             <div class="accordion-item" style="border-radius: 10px; border-left: 4px solid var(--bg-pink) !important;">
                                 <h2 class="accordion-header">
@@ -77,7 +88,7 @@
                                             <div class="col-12">
                                                 <div class="input-group">
                                                     <div class="form-floating">
-                                                        <input type="text" id="txtNomeEmpresa" class="form-control" placeholder="">
+                                                        <input type="text" id="txtNomeEmpresa" class="form-control" placeholder="" value="2">
                                                         <label>Nome da empresa</label>
                                                     </div>
                                                 </div>
@@ -130,14 +141,14 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtNOrcamento" class="form-control" placeholder="">
+                                                    <input type="text" id="txtNOrcamento" class="form-control" placeholder="" value="324242">
                                                     <label>Nº do orçamento</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6" id="containerValor">
                                                 <div class="form-floating">
-                                                    <input type="text" id="txtValorNota" class="form-control" placeholder="">
+                                                    <input type="text" id="txtValorNota" class="form-control number-real" placeholder="" value="343534">
                                                     <label>Valor da nota (€)</label>
                                                 </div>
                                             </div>
@@ -209,7 +220,7 @@
 
                                             <div class="col-12">
                                                 <div class="form-floating">
-                                                    <textarea class="form-control" id="txtDescricaoCurta" style="min-height: 80px"  placeholder=""></textarea>
+                                                    <textarea class="form-control" id="txtDescricaoCurta" style="min-height: 80px"  placeholder="">sfdfsfsf</textarea>
                                                     <label>Descrição do item</label>
                                                     <div class="d-flex justify-content-between mt-1">
                                                         <small class="text-muted">Mínimo 10 caracteres</small>
@@ -218,7 +229,7 @@
                                             </div>
                                             <div class="col-12 mt-3">
                                                 <div class="form-floating">
-                                                    <textarea class="form-control" id="txtDescricaoLonga" style="min-height: 120px" placeholder=""></textarea>
+                                                    <textarea class="form-control" id="txtDescricaoLonga" style="min-height: 120px" placeholder="">fsfsdffsdf</textarea>
                                                     <label>Descrição do serviço/validação</label>
                                                     <small class="text-muted">Mínimo 20 caracteres. Inclua links se necessário.</small>
                                                 </div>
@@ -230,10 +241,11 @@
                             </div>
                         </div>
                         
+                        <div class='col-12' id='containerAprovação' data-id-classe='<?= $_SESSION["classeAgente"];?>'></div>
                         <?php
-                            if(in_array($_SESSION["classeAgente"], [1])){
-                                echo "<div class='col-12' id='containerAprovação'></div>";
-                            }
+                            //if(in_array($_SESSION["classeAgente"], [1])){
+                              //  echo "<div class='col-12' id='containerAprovação' data-id-classe='>'></div>";
+                            //}
                         ?>
 
                         <div class="col mt-3" id="containerButton">

@@ -16,9 +16,9 @@
     $dados = $auth->validar($usuario, $senha);
 
     if ($dados) {
-        $_SESSION['idAgente']     = $dados['idLogin'];
-        $_SESSION['nomeAgente']   = $dados['nomeUser'];
-        $_SESSION['classeAgente'] = $dados['classeUser'];
+        $_SESSION['idAgente']     = $dados['idUserDados'];
+        $_SESSION['nomeAgente']   = $dados['nomeUserDados'];
+        $_SESSION['classeAgente'] = $dados['classeUserDados'];
         $_SESSION['slugClasseAgente'] = $dados['slugClasse'];
         $_SESSION['nomeClasseAgente'] = $dados['nomeClasse'];
         $_SESSION['logado']       = true;
@@ -32,7 +32,7 @@
             5 => "encomendas",
         ];
 
-        $destino = $rotas[$dados['classeUser']] ?? "home";
+        $destino = $rotas[$dados['classeUserDados']] ?? "home";
         echo $destino;
     } else {
         echo "erro";

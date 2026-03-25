@@ -109,12 +109,15 @@ $routes = array(
         "get-login-existe" => "app/functions/getLoginExiste.php",
 
         "enviar-email" => "app/functions/setEnviarEmail.php",
+        "enviar-sms" => "app/functions/setEnviarSMS.php",
+
+        "load-list-responsavel-order-compra-slc" => "app/functions/getLoadListResposanvelOrderCompra.php",
     ],
 
     "modal" => [
         "modal-confirme" => "app/views/modal/modalConfirme.php",
         //pg formando
-        "modal-add-formando" => "app/views/modal/modeloAddFormando.php",
+        "modal-add-formando" => "app/views/modal/modalAddFormando.php",
         "modal-add-curso" => "app/views/modal/modalAddCurso.php",
         "modal-add-local" => "app/views/modal/modalAddLocal.php",
         "modal-add-funcionario" => "app/views/modal/modalAddFuncionario.php",

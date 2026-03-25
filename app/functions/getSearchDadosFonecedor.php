@@ -4,7 +4,7 @@
     ini_set("display_startup_errors", 1);
     error_reporting(E_ALL);
     if(ob_get_length()) ob_clean();
-    $result = new Application();
+    $result = new Fornecedor();
     $list = $result->SearchDadosFornecedor($_POST["dados"]);
     ob_end_clean();
     header("Content-Type: application/json; charset=UTF-8");

@@ -1,12 +1,21 @@
 $(document).ready(async()=>{
     await monteListFormando(0)
 })
-
+/**
+ * 
+ * @param {time} time conveter tempo em segundo
+ * @returns 
+ */
 function timeToMs(time) {
     let [horas, minutos, segundos] = time.split(':').map(Number)
     return (horas * 3600 + minutos * 60 + segundos) * 1000
 }
 
+/**
+ * 
+ * @param {time} ms converter em milisegundos 
+ * @returns 
+ */
 function convertMilliseconds(ms) {
     let horas = Math.floor(ms / 3600000)
     ms %= 3600000
@@ -20,6 +29,11 @@ function convertMilliseconds(ms) {
     }
 }
 
+/**
+ * 
+ * @param {array} dadosGet lista de busca de formando
+ * @returns list com os dodos 
+ */
 async function getLoadListFormando(dadosGet){
     try {
         let dados = new FormData()
@@ -38,6 +52,11 @@ async function getLoadListFormando(dadosGet){
     }
 }
 
+/**
+ * 
+ * @param {int} pagina numero da pagina
+ * monta o html da lista de formando
+ */
 async function monteListFormando(pagina) {
     try {
         let txtBuscaFormando = document.getElementById("txtBuscaFormando")
@@ -112,6 +131,11 @@ async function monteListFormando(pagina) {
     }
 }
 
+/**
+ * 
+ * @param {int} novaPagina numero da pagina
+ * pega a func e passa a pagina 
+ */
 function passarPagina(novaPagina) {
     window.scrollTo({
         top: 0,
@@ -120,6 +144,10 @@ function passarPagina(novaPagina) {
     monteListFormando(novaPagina)
 }
 
+/**
+ * 
+ * @param {event} event evento do botao
+ */
 async function editarRegistroFormando(event){
     try {
         loadAwaitAction("show")
@@ -195,9 +223,6 @@ async function editarRegistroFormando(event){
                         let resultCrud = await CRUDFormando(JSON.stringify(dados))
 
                         if(resultCrud && typeof resultCrud == 'object' && resultCrud.obj.sucesso){
-                            modalEl.remove()
-                            $("#modal-container").text()
-                            $(".modal-backdrop").remove()
                             setTimeout(async()=>{
                                 await monteListFormando(0)
                             },800)
@@ -214,6 +239,11 @@ async function editarRegistroFormando(event){
     }
 }
 
+/**
+ * 
+ * @param {array} dadosGet recebe os dados para o crud 
+ * @returns return true ou false
+ */
 async function CRUDFormando(dadosGet) {
     try {
         let dados = new FormData()
@@ -239,6 +269,10 @@ async function CRUDFormando(dadosGet) {
     }
 }
 
+/**
+ * 
+ * @param {int} id id do registro a ser excluido 
+ */
 async function excluirRegistroFormando(id) {
     try {
         let result = await openSubModal("modal-confirme", 'Confirmar', 'Deseja realmente exluir o registro?')
@@ -386,6 +420,10 @@ if(btnAddFormando){
     }
 }
 
+/**
+ * 
+ * @returns false se estiver tudo ok
+ */
 function checkVazioFormando(){
     try {
         let txtCodColaborador = document.getElementById("txtCodColaborador")
@@ -519,6 +557,11 @@ if(btnAddCurso){
 }
 
 //2
+/**
+ * 
+ * @param {int} novaPagina numero da pagina
+ * eh o passador para mover a pagina 
+ */
 function passarBuscaCurso(novaPagina) {
     window.scrollTo({
         top: 0,
@@ -528,6 +571,11 @@ function passarBuscaCurso(novaPagina) {
 }
 
 //3
+/**
+ * 
+ * @param {array} dadosGet dados para a busca 
+ * @returns 
+ */
 async function searchDadosCurso(dadosGet) {
     try {
         let dados = new FormData()
@@ -546,6 +594,11 @@ async function searchDadosCurso(dadosGet) {
 }
 
 //4
+/**
+ * 
+ * @param {array} dadosGet dados para a busca 
+ * @returns 
+ */
 async function loadListtableCurso(dadosGet) {
     try {
         let dados = new FormData()
