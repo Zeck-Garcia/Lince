@@ -66,7 +66,7 @@ class OrdemCompra{
         $inicio = ($paginaSet * $limite) - $limite;
         $param = [];
 
-        $idrOrder = isset($dadosT["idOrder"]) ? $param[] =  $dadosT["idOrder"] : '';
+        $idOrder = isset($dadosT["idOrder"]) ? $param[] =  $dadosT["idOrder"] : '';
     
         $where = '';
         if(isset($dadosT["idOrder"]) && $dadosT["idOrder"] != ''){
@@ -84,9 +84,7 @@ class OrdemCompra{
         }
 
         if($searchOrderCompra != ''){
-            $where .= " AND (oc.dataCriacaoOrderCompra=? OR pr.nomePrioridade=? OR si.nomeUserDados LIKE ? OR oc.codOrderCompra=?) ";
-            // $where .= " AND (oc.idOrderCompra=? OR oc.dataCriacaoOrderCompra=? OR pr.nomePrioridade=? OR si.nomeUserDados LIKE ? OR oc.codOrderCompra=?) ";
-            // $param[] = $searchOrderCompra;
+            $where .= " AND (oc.dataCriacaoOrderCompra = STR_TO_DATE(?, '%Y-%m-%d') OR pr.nomePrioridade=? OR si.nomeUserDados LIKE ? OR oc.codOrderCompra=?) ";
             $param[] = $dataInicio;
             $param[] = $searchOrderCompra;
             $param[] = "%".$searchOrderCompra."%";
@@ -102,14 +100,16 @@ class OrdemCompra{
             $where .= " AND oc.aprovadoRejeitadoOrderCompra IS NULL ";
         }
 
-        if($_SESSION["classeAgente"] != 1){
-            $where .= " AND idSolicitanteOrderCompra=?";
+        if(!in_array($_SESSION["classeAgente"], [1,6])){
+            $where .= " AND idSolicitanteOrderCompra=? ";
             $param[] = $_SESSION["idAgente"];
         }
 
-        if($_SESSION["classeAgente"] == 1 && isset($dadosT["idOrder"]) && $dadosT["idOrder"] == ''){
-            $where .= " AND idAdminResponsavel=? OR idAdminResponsavel=0";
+        if(in_array($_SESSION["classeAgente"], [1,6]) && isset($dadosT["searchOrderCompra"]) && $dadosT["searchOrderCompra"] != ''){
+            $where .= " AND (idAdminResponsavel=? OR idAdminResponsavel=0) ";
             $param[] = $_SESSION["idAgente"];
+        } else {
+            $where .= " AND idAdminResponsavel=0";
         }
 
         $select = "WITH result AS (SELECT oc.*, si.nomeUserDados AS nomeSi, si.idUserDados as idSi, si.departamentoUserDados as dpSi, si.cargoUserDados AS cargoSi, si.classeUserDados AS classeSi, si.emailUserDados AS emailSi, siA.*, dp.*, ca.*, cl.*, fo.*, pr.*
@@ -142,6 +142,7 @@ class OrdemCompra{
         SELECT *, (SELECT COUNT(*) FROM result ) AS totalRegistro FROM result ORDER BY idOrderCompra DESC LIMIT " . $inicio . "," . $limite;
 
         $selectCompleta = $select . $where . $selectWhere;
+        // return $selectCompleta = $select . $where . $selectWhere;
 
         $qry = $this->db->buscar($selectCompleta,$param);            
 

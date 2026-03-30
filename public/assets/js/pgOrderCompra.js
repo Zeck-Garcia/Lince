@@ -403,7 +403,7 @@ async function monteModalFornecedor(pagina) {
                 newTr.innerHTML = `<td class='text-center'>${item.id}</td>
                         <td>${item.nome}</td>
                         <td data-site-fornecedor='${item.site}'>${item.email}</td>
-                        <td><button class='btn btn-outline-info btn-sm btnUsarFornecedor' title='Usar esse fornecedor'><i class='bi bi-box-arrow-up-right'></i></button></td>
+                        <td>${item.ativo == 1 ? "<button class='btn btn-outline-info btn-sm btnUsarFornecedor' title='Usar esse fornecedor'><i class='bi bi-box-arrow-up-right'></i></button>" : '<small>Desativado</small>'}</td>
                 `
                 tbodyListFornecedor.append(newTr)
             })
@@ -540,7 +540,7 @@ async function sendSaveOrder(modalEl) {
                 }
 
                 await enviarEmail(JSON.stringify(dadosSend))
-                //await enviarSMS(JSON.stringify(dadosSend))
+                await enviarSMS(JSON.stringify(dadosSend))
         }
 
         return result
@@ -712,6 +712,7 @@ async function montarVerOrder(modal, id){
                 let idSolicitante = item.idSolicitanteOrder
                 let statusOrder = item.aprovaRejeitaOrder
                 let aprovaRejeitaOrder = item.aprovaRejeitaOrder
+                let permi = [1,6]
 
                 txtNumberOrder.value = item.codOrder
                 txtNumberOrder.setAttribute('data-id-order',item.codOrder)
@@ -778,7 +779,7 @@ async function montarVerOrder(modal, id){
                                                 </div>
                                             </div>`
 
-                    if(statusOrder == null && classValide == 1){
+                    if(statusOrder == null && permi.includes(Number(classValide))){
                         if(containerAprovação){
                             containerAprovação.append(newContainerAprovacao)
                         }
@@ -787,7 +788,6 @@ async function montarVerOrder(modal, id){
                             containerAprovação.append(newContainerAprovacao)
                         }
                     }
-
                 }
 
                 let newStatus = document.createElement("div")

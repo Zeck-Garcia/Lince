@@ -19,30 +19,47 @@ class Formacao{
         $dadosT = $this->app->limparInputs($jsonDados);
 
         $paginaSet = ($dadosT["paginaSet"] == 0 ? 1 : $dadosT["paginaSet"]);
-        $limite = 7;
+        $limite = 15;
         $inicio = ($paginaSet * $limite) - $limite;
         $where = "";
         $param = [];
         if($dadosT["dataDe"] != '' && $dadosT["dataAte"]){
-            $where = ' WHERE dataFormacao >= ? AND dataFormacao <= ? ';
-        } else {
+            $where = ' AND dataFormacao >= ? AND dataFormacao <= ? ';
+        } else if(isset($dadosT["buscar"]) && $dadosT["buscar"] != ''){
             switch((int)($dadosT["action"])){
                 case 1: //cod colaborador
-                    $where = " WHERE fa.codFuncionarioFormacao = ? ";
+                    $where = " AND CAST(fa.codFuncionarioFormacao AS CHAR) = ? ";
                     break;
                 case 2: //nome
-                    $where = " WHERE fo.nomeFuncionario LIKE ? ";
+                    $where = " AND fo.nomeFuncionario LIKE ? ";
                     break;
                 case 3: //local
-                    $where = " WHERE lo.nomeLoja LIKE ? ";
+                    $where = " AND lo.nomeLoja LIKE ? ";
                     break;
                 case 4: //formacao
-                    $where = " WHERE nomeFormacaoNome LIKE ? ";
+                    $where = " AND nomeFormacaoNome LIKE ? ";
+                    break;
+                case 5:
+                    $where = " AND loj.nomeLoja LIKE ? ";
                     break;
             }
         }
 
-        $select = "WITH result AS (SELECT * FROM tbFormacao fa
+        if($dadosT["dataDe"] != ''){
+            $param[] = $dadosT["dataDe"];
+            $param[] = $dadosT["dataAte"];
+        } else if ($dadosT["buscar"] != '' && in_array((int)($dadosT["action"]),[2,3,4,5])){
+            $param[] = "%" . $dadosT["buscar"] . "%";
+        } else if($dadosT["buscar"] != '' && in_array((int)($dadosT["action"]),[1])){
+            $param[] = $dadosT["buscar"];            
+        }
+
+        // if(isset($dadosT["estado"]) && $dadosT["buscar"] == '' && $dadosT["dataDe"] == ''){
+            $where .= " AND estadoFormacao=? ";
+            $param[] = $dadosT["estado"];
+        // }
+
+        $select = "WITH result AS (SELECT fa.*, fo.*, fn.*, lo.*, loj.nomeLoja AS nomeLojaLoj FROM tbFormacao fa
                     LEFT JOIN tbFuncionario fo
                     ON fo.codFuncionarioFuncionario = fa.codFuncionarioFormacao
 
@@ -50,20 +67,15 @@ class Formacao{
                     ON fn.idFormacaoNome = fa.codFormacaoNomeFormacao
 
                     LEFT JOIN tbLojas lo
-                    ON lo.idLoja = fa.codLocalFormacao ";
+                    ON lo.idLoja = fa.codLocalFormacao
+
+                    LEFT JOIN tbLojas loj
+                    ON loj.idLoja = fo.lojaFuncionario
+                    WHERE 1=1";
 
         $selectFim = " ORDER BY fa.idFormacao DESC)
                         SELECT *, (SELECT COUNT(*) FROM result ) AS totalRegistro FROM result ORDER BY idFormacao DESC LIMIT " . $inicio . "," . $limite;
         $sqlFInal = $select . $where . $selectFim;
-        
-        if($dadosT["dataDe"] != ''){
-            $param[] = $dadosT["dataDe"];
-            $param[] = $dadosT["dataAte"];
-        } else if (in_array((int)($dadosT["action"]),[2,3,4])){
-            $param[] = "%" . $dadosT["buscar"] . "%";
-        } else if(in_array((int)($dadosT["action"]),[1])){
-            $param[] = $dadosT["buscar"];            
-        }
 
         $qry = $this->db->buscar($sqlFInal, $param);
 
@@ -79,10 +91,12 @@ class Formacao{
                     "codLocalFormacao" => $value["codLocalFormacao"],
                     "nomeColaborador" => $value["nomeFuncionario"],
                     "lojaFuncionario" => $value["lojaFuncionario"],
+                    "nomeLoja" => $value["nomeLojaLoj"],
                     "ativoFuncionario" => $value["ativoFuncionario"],
                     "nomeFormacao" => $value["nomeFormacaoNome"],
                     "ativoFormacaoNome" => $value["ativoFormacaoNome"],
                     "nomeLocal" => $value["nomeLoja"],
+                    "estado" => $value["estadoFormacao"],
                     "ativoFormacaoLocal" => $value["ativoLoja"],
                     "totalRegistro" => $value["totalRegistro"],
                     "limite" => $limite,
@@ -137,18 +151,20 @@ class Formacao{
 
     private function searchCusroAoSalvar($dados){
         $select = "SELECT * FROM tbFormacao
-                    WHERE codFuncionarioFormacao =?
-                    AND codFormacaoNomeFormacao = ? 
-                    AND dataFormacao = ?
-                    AND tempoFormacao = ?
-                    AND codLocalFormacao = ?";
+                    WHERE codFuncionarioFormacao=?
+                    AND codFormacaoNomeFormacao=? 
+                    AND dataFormacao=?
+                    AND tempoFormacao=?
+                    AND codLocalFormacao=?
+                    AND estadoFormacao=?";
         $tempo = $dados["hora"] . ":" . $dados["minuto"] . ":00";
         $qry = $this->db->buscar($select, [
             $dados["codColaborador"],
             $dados["curso"],
             $dados["data"],
             $tempo,
-            $dados["loja"]
+            $dados["loja"],
+            $dados["estado"]
         ]);
         if(count($qry) > 0){
             return ["sucesso" => false, "msg" => "Já tem uma formação registrada neste mesmo dia para o colaborador em questão"];
@@ -158,16 +174,17 @@ class Formacao{
 
     private function salvarFormando(array $dados){
             $select = "INSERT INTO tbFormacao
-                    (codFuncionarioFormacao,codFormacaoNomeFormacao,dataFormacao,tempoFormacao,codLocalFormacao) 
-                    VALUES (?,?,?,?,?)";
+                    (codFuncionarioFormacao,codFormacaoNomeFormacao,dataFormacao,tempoFormacao,codLocalFormacao,estadoFormacao) 
+                    VALUES (?,?,?,?,?,?)";
 
             $tempo = $dados["hora"] . ':' . $dados["minuto"] . ":00";
             $qry = $this->db->executarSQL($select,[
                 $dados["codColaborador"],
                 $dados["curso"],
-                $dados["data"],
+                $dados["data"] == '' ? NULL : $dados["data"],
                 $tempo,
                 $dados["loja"],
+                $dados["estado"]
             ]);
 
             $resultColaborador = $this->SearchExisteFuncionario($dados);
@@ -186,7 +203,7 @@ class Formacao{
 
     private function editarFormando(array $dados){
         $select = "UPDATE tbFormacao
-                    SET codFormacaoNomeFormacao=?,dataFormacao=?,tempoFormacao=?,codLocalFormacao=? 
+                    SET codFormacaoNomeFormacao=?,dataFormacao=?,tempoFormacao=?,codLocalFormacao=?,estadoFormacao=? 
                     WHERE idFormacao = ?";
         $tempo = $dados["hora"] . ':' . $dados["minuto"] . ":00";
         $qry = $this->db->executarSQL($select, [
@@ -194,6 +211,7 @@ class Formacao{
             $dados["data"],
             $tempo,
             $dados["loja"],
+            1,
             $dados["idFormando"]
         ]);
         if($qry->rowCount() >= 0){

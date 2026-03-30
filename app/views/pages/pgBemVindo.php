@@ -3,6 +3,7 @@
         <h3><strong>Bem-vindo ao Lince</strong></h3>
 
         <?php
+            //rh
             if(in_array($_SESSION["classeAgente"], [4])){
                echo "<div style='text-align: justify;'>
                     <h2><strong>Recursos Humanos</strong></h2>
@@ -25,7 +26,8 @@
                "; 
             }
 
-            if(in_array($_SESSION["classeAgente"], [1,2])){
+            //ordem de compra
+            if(in_array($_SESSION["classeAgente"], [1,2,6])){
                 echo "<div style='text-align: justify;'>
                         <h2><strong>Ordem de compra</strong></h2>
                         <p>No sistema principal, você pode criar ordem de compra, visualizar. Essa ordem de compra será para o responsável realizar a validação. Quanto mais informações tiver na ordem de compra melhor para entender a necessidade da compra.</p>

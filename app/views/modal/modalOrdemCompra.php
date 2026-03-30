@@ -253,7 +253,7 @@
                             <button type="button" id="btnExcluir" class="btn btn-outline-danger d-none" style="border-radius: 8px;" data-id-agente="<?php echo $_SESSION["idAgente"];?>" data-class-agente="<?php echo $_SESSION["classeAgente"];?>">Excluir</button>
                             
                             <?php
-                                if(in_array($_SESSION["classeAgente"], [1])){
+                                if(in_array($_SESSION["classeAgente"], [1,6])){
                                     echo "<button type='button' id='btnValidar' class='btn btn-success px-4' style='border-radius: 8px;'>Validar</button>";
                                 }
 

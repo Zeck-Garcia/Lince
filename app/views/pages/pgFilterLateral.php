@@ -76,9 +76,15 @@
 
                 //adm
                 if(in_array($_SESSION["classeAgente"], [1])){
-                    echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/utilizadores' class='nav-link'><i class='bi bi-cart-check'></i> &nbsp Utilizadores</a></li>";
-
                     echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/ordem-compra' class='nav-link'><i class='bi bi-cart-check'></i> &nbsp Ordem de Compra</a></li>";
+                }
+
+                if(in_array($_SESSION["classeAgente"], [1,6])){
+                    echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/utilizadores' class='nav-link'><i class='bi bi-cart-check'></i> &nbsp Utilizadores</a></li>";
+                }
+
+                if(in_array($_SESSION["classeAgente"], [1,2,6])){
+                    echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/fornecedor' class='nav-link'><i class='bi bi-building-fill'></i> &nbsp Fornecedor</a></li>";
                 }
 
                 ?>
@@ -118,8 +124,14 @@
 
                 if(in_array($_SESSION["classeAgente"], [1])){
                     echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/utilizadores' class='nav-link'><i class='bi bi-cart-check'></i> &nbsp Utilizadores</a></li>";
+                }
 
+                if(in_array($_SESSION["classeAgente"], [1,6])){
                     echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/ordem-compra' class='nav-link'><i class='bi bi-cart-check'></i> &nbsp Ordem de Compra</a></li>";
+                }
+
+                if(in_array($_SESSION["classeAgente"], [1,2,6])){
+                    echo "<li class='nav-item'><a href='{$_SESSION["slugClasseAgente"]}/fornecedor' class='nav-link'><i class='bi bi-building-fill'></i> &nbsp Fornecedor</a></li>";
                 }
             ?>
         </ul>

@@ -193,7 +193,9 @@ async function montechkBoxReceberOrder(modal, monte){
                 if(modal.querySelector("#containerResposanvel")){
                     modal.querySelector("#containerResposanvel").remove()
                 }
-                if(slcNivelUser.value == 1){
+                let permi = [1,6]
+
+                if(permi.includes(Number(slcNivelUser.value))){
                     let newItem = document.createElement("div")
                     newItem.id = "containerResposanvel"
                     newItem.classList.add('form-check','form-switch','ms-3','mt-2')
@@ -283,6 +285,7 @@ async function montarVerUtilizador(modal, id){
             }
         })
 
+        let permi = [1,6]
         if(result && Array.isArray(result.obj) && result.obj.length > 0){
             result.obj.forEach(async (item)=>{
                 await loadListCargoSLC("slcModalCargoColaborador",item.idDepartamento)
@@ -297,9 +300,9 @@ async function montarVerUtilizador(modal, id){
                 chkAtivo.checked = item.ativo == 1 ? true : false  
                 txtSenhaUser.value = ''
                 txtConfirmarSenhaUser.value = ''
-                await montechkBoxReceberOrder(modal, item.idClasse == 1 ? 1 : 0)
+                await montechkBoxReceberOrder(modal, permi.includes(Number(item.idClasse)) ? 1 : 0)
                 let chkReceberOrder = containerDadosLogin.querySelector("#chkReceberOrder")
-                chkReceberOrder.checked = item.receberOrderCompra == 1 ? true : false
+                if(chkReceberOrder) chkReceberOrder.checked = item.receberOrderCompra == 1 ? true : false
             })
             txtLoginUser.setAttribute("disabled", true)
         }
@@ -492,7 +495,8 @@ function checkVazioUtilizador(modal, action){
             slcNivelUser.classList.remove("border-danger")
         }
 
-        if(slcNivelUser.value == 1){
+        let permi = [1,6]
+        if(permi.includes(Number(slcNivelUser.value))){
             if(txtEmailColaborador.value == ''){
                 txtEmailColaborador.classList.add("border-danger")
                 txtEmailColaborador.focus()

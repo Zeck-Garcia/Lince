@@ -937,6 +937,30 @@ async function loadListUtilizador(dadosGet){
     }
 }
 
+/**
+ * 
+ * @param {string} select campo a receber a lista de valores 
+ * @returns 
+ */
+async function loadListFornecedor(dadosGet){
+    try {
+        let dados = new FormData()
+        dados.append("dados", dadosGet)
+    
+        let response = await fetch("api/get-load-list-fornecedor", {
+            method : "POST",
+            body : dados
+        })
+    
+        if(!response.ok) throw new Error("Erro na rede")
+    
+        return await response.json()
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 async function compressImages(files, maxWidth, maxHeight, quality) {
     let promises = Array.from(files).map(file => {
         return compressImage(file, maxWidth, maxHeight, quality)
@@ -1045,6 +1069,24 @@ async function getLoadListFornecedor(dadosGet){
         dados.append("dados", JSON.stringify(dadosGet))
 
         let response = await fetch("api/get-load-list-fornecedor",{
+            method : 'POST',
+            body : dados
+        })
+
+        if(!response.ok) throw new Error("error")
+
+        return response.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function getLoadListplanearFormacao(dadosGet){
+    try {
+        let dados = new FormData()
+        dados.append("dados", JSON.stringify(dadosGet))
+
+        let response = await fetch("api/get-load-list-planear-formacao",{
             method : 'POST',
             body : dados
         })

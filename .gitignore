@@ -3,3 +3,5 @@
 atualizacao_table
 /app/controllers/class/ConfigMsgSMS.php
 /app/controllers/class/ConfigEmail.php
+/backup 25 03 2026
+/nao enviar

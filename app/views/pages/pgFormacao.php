@@ -4,18 +4,34 @@
             <h3 class="fw-bold m-0">Formação</h3>
             <p class="text-muted small">Gestão de Formação</p>
         </div>
-        <button id='btnAddFormando' class="btn btn-success px-4 py-2 shadow-sm fw-bold" onclick="">
-            <i class="bi bi-plus-lg me-2"></i> Nova Formação
-        </button>
+        <div>
+            <button id='btnAddPlanearFormando' class="btn btn-outline-secondary px-4 py-2 shadow-sm fw-bold" onclick="novaFormacao(this)">
+                <i class="bi bi-person-lines-fill me-2"></i> Planear Formação
+            </button>
+            <button id='btnAddFormando' class="btn btn-success px-4 py-2 shadow-sm fw-bold" onclick="novaFormacao(this)">
+                <i class="bi bi-plus-lg me-2"></i> Nova Formação
+            </button>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
         <div class="card-body p-3">
             <div class="row g-2">
-                <div class="col-md-5">
+
+                <div class="col-md-1">
                     <div class="form-floating">
-                        <input type="text" id="txtBuscaFormando" class="form-control enterPress" placeholder="Pesquisar por autor, status, data, número ou ...">
-                        <label for="">Pesquisar por autor, status, data, número ou ...</label>
+                        <select id="slcSituacao" class="form-select">
+                            <option value="1" selected>Concluido</option>
+                            <option value="0">Não Concluido</option>
+                        </select>
+                        <label for="">Situação</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="text" id="txtBuscaFormando" class="form-control enterPress" placeholder="">
+                        <label for="">Digite a sua pesquisa</label>
                     </div>
                 </div>
 
@@ -27,6 +43,7 @@
                             <option value="2">Nome</option>
                             <option value="3">Local</option>
                             <option value="4">Formação</option>
+                            <option value="5">Loja</option>
                         </select>
                         <label for="">Tipo</label>
                     </div>
@@ -36,11 +53,11 @@
                     <div class="input-group">
                         <div class="form-floating">
                             <input type="date" id="txtDeFormando" class="form-control" placeholder="">
-                            <label for="">sd</label>
+                            <label for="">De</label>
                         </div>
                         <div class="form-floating">
                             <input type="date" id="txtAteFormando" class="form-control" placeholder="">
-                            <label for="">sd</label>
+                            <label for="">Ate</label>
                         </div>
                     </div>
                 </div>
@@ -59,10 +76,12 @@
                     <tr>
                         <th class="py-3 border-0">Cód.<br>func.</th>
                         <th class="py-3 border-0">Nome</th>
+                        <th class="py-3 border-0">Loja</th>
                         <th class="py-3 border-0">Formação</th>
                         <th class="py-3 border-0">Data</th>
                         <th class="py-3 border-0">Tempo</th>
                         <th class="py-3 border-0">Local</th>
+                        <th class="py-3 border-0">Situação</th>
                         <th class="py-3 border-0">Ação</th>
                     </tr>
                 </thead>

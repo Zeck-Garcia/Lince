@@ -12,7 +12,14 @@ function runRouter($routes) {
 
     $classeAtual = $_SESSION['classeAgente'] ?? null;
 
-    $restritos = ["recursoHumano" => 4, "adm" => 1, "encomendas" => 5, "colaborador" => 2, "fornecedor" => 3];
+    $restritos = [
+                    "adm" => 1, 
+                    "colaborador" => 2, 
+                    "fornecedor" => 3, 
+                    "recursoHumano" => 4, 
+                    "encomendas" => 5, 
+                    "auditor" => 6
+                ];
 
     if (array_key_exists($prefix, $restritos) && $classeAtual != $restritos[$prefix]) {
         if (!headers_sent()) {
@@ -48,13 +55,15 @@ $routes = array(
     "recursoHumano" => [
         "home" => "app/views/pages/pgBemVindo.php",
         "formacao" => "app/views/pages/pgFormacao.php",
-        "calculo-hora" => "app/views/pages/pgCalculoHora.php"
+        "calculo-hora" => "app/views/pages/pgCalculoHora.php",
+        "planear-formacao" => "app/views/pages/pgPlanearFormacao.php",
     ],
 
     "adm" => [
         "home" => "app/views/pages/pgBemVindo.php",
         "utilizadores" => "app/views/pages/pgUltilizadores.php",
         "ordem-compra" => "app/views/pages/pgOrdemCompra.php",
+        "fornecedor" => "app/views/pages/pgFornecedor.php",
     ],
 
     "gestorLoja" => [
@@ -64,6 +73,13 @@ $routes = array(
     "colaborador" => [
         "home" => "app/views/pages/pgBemVindo.php",
         "ordem-compra" => "app/views/pages/pgOrdemCompra.php",
+        "fornecedor" => "app/views/pages/pgFornecedor.php",
+    ],
+
+    "auditor" => [
+        "home" => "app/views/pages/pgBemVindo.php",
+        "ordem-compra" => "app/views/pages/pgOrdemCompra.php",
+        "fornecedor" => "app/views/pages/pgFornecedor.php",
     ],
 
     "api" => [
@@ -93,17 +109,19 @@ $routes = array(
 
         "load-list-nivel-slc" => "app/functions/getLoadListNivel.php",
 
-        "load-list-utilizador" => "app/functions/getLoadListUtilizador.php",
         "load-list-order-comrpa" => "app/functions/getLodListOrdemCompra.php",
-        "get-dados-order-compra" => "app/functions/getDadosOrdemCompra.php",
-
+        //"get-dados-order-compra" => "app/functions/getDadosOrdemCompra.php",
+        
         "get-search-dados-fornecedor" => "app/functions/getSearchDadosFonecedor.php",
-
+        
         "crud-order-compra" => "app/functions/crudOrderCompra.php",
-
+        
         //fornecedor
         "get-load-list-fornecedor" => "app/functions/getLoadListFornecedor.php",
-
+        "crud-fornecedor" => "app/functions/crudFornecedor.php",
+        
+        //utilizador
+        "load-list-utilizador" => "app/functions/getLoadListUtilizador.php",
         "crud-utilizador" => "app/functions/crudUtilizador.php",
 
         "get-login-existe" => "app/functions/getLoginExiste.php",
@@ -112,6 +130,8 @@ $routes = array(
         "enviar-sms" => "app/functions/setEnviarSMS.php",
 
         "load-list-responsavel-order-compra-slc" => "app/functions/getLoadListResposanvelOrderCompra.php",
+
+        "teste" => "app/functions/funcTeste.php",
     ],
 
     "modal" => [
@@ -125,6 +145,7 @@ $routes = array(
         "modal-utilizador" => "app/views/modal/modalUtilizador.php",
         "modal-order-compra" => "app/views/modal/modalOrdemCompra.php",
         "modal-list-fornecedor" => "app/views/modal/modalListFornecedor.php",
+        "modal-add-fornecedor" => "app/views/modal/modalAddFornecedor.php",
     ],
 );
 

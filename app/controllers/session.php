@@ -30,6 +30,7 @@
             2 => "colaborador",
             4 => "recursoHumano",
             5 => "encomendas",
+            6 => "auditor",
         ];
 
         $destino = $rotas[$dados['classeUserDados']] ?? "home";

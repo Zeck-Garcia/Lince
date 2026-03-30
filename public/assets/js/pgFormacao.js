@@ -63,6 +63,7 @@ async function monteListFormando(pagina) {
         let slcTipoSearch = document.getElementById("slcTipoSearch")
         let txtDeFormando = document.getElementById("txtDeFormando")
         let txtAteFormando = document.getElementById("txtAteFormando")
+        let slcSituacao = document.getElementById("slcSituacao")
 
         let dados = {
             paginaSet : pagina,
@@ -70,7 +71,9 @@ async function monteListFormando(pagina) {
             buscar : txtBuscaFormando ?.value || '',
             dataDe : txtDeFormando ?.value || '',
             dataAte : txtAteFormando ?.value || '',
+            estado : slcSituacao ?.value || ''
         }
+
         let result = await getLoadListFormando(JSON.stringify(dados))
         console.log(result)
         let tempoTotal = 0
@@ -78,9 +81,9 @@ async function monteListFormando(pagina) {
         tbodyFormando.textContent = ''
         if(result && Array.isArray(result.obj) && result.obj.length > 0){
             result.obj.forEach(item => {
-                let timeFormacao = item.tempoFormacao.split(":")
+                let timeFormacao = item.tempoFormacao ? item.tempoFormacao.split(":") : ("00:00:00").split(":")
                 
-                tempoTotal += timeToMs(item.tempoFormacao)
+                tempoTotal += timeToMs(item.tempoFormacao || "00:00:00")
 
                 let horaFormacao = timeFormacao[0]
                 let minutoFormacao = timeFormacao[1]
@@ -88,10 +91,12 @@ async function monteListFormando(pagina) {
                 let newTr = document.createElement("tr")
                 newTr.innerHTML = `<td data-id-formando='${item.idFormacao}'>${item.codColaborador}</td>
                                 <td>${item.nomeColaborador}</td>
+                                <td>${item.nomeLoja || ''}</td>
                                 <td class='${item.nomeFormacao || 'text-danger fw-bold'}' data-id-curso='${item.codNomeFormacao}'>${item.nomeFormacao || 'Curso não encontrado'}</td>
-                                <td>${dataIso(item.dataFormacao)}</td>
+                                <td>${item.dataFormacao ? dataIso(item.dataFormacao) : ''}</td>
                                 <td>${horaFormacao}:${minutoFormacao}</td>
-                                <td data-id-local='${item.codLocalFormacao}'>${item.nomeLocal}</td>
+                                <td data-id-local='${item.codLocalFormacao}'>${item.nomeLocal || ''}</td>
+                                <td>${item.estado == 1 ? 'Concluído' : 'Por Concl.'}</td>
                                 <td class='d-flex g-2'>
                                     <i class='bi bi-pen btn btn-outline-warning' onclick='editarRegistroFormando(this)'></i>
                                     <i class='bi bi-trash btn btn-outline-danger ms-2' onclick='excluirRegistroFormando(${item.idFormacao})'></i>
@@ -116,7 +121,9 @@ async function monteListFormando(pagina) {
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td class='fw-bold'>${horaFinal}:${minutoFinal}</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>`
 
@@ -186,13 +193,13 @@ async function editarRegistroFormando(event){
             txtNomeColaborador.value = rowList.cells[1].textContent
 
             slcTipoCurso.parentNode.classList.add("active")
-            slcTipoCurso.value = rowList.cells[2].getAttribute("data-id-curso")
+            slcTipoCurso.value = rowList.cells[3].getAttribute("data-id-curso")
 
             txtDataFormacao.parentNode.classList.add("active")
-            let [dia, mes, ano] = rowList.cells[3].textContent.split("/")
+            let [dia, mes, ano] = rowList.cells[4].textContent.split("/")
             txtDataFormacao.value = `${ano}-${mes}-${dia}`
 
-            let [hora, minuto] = rowList.cells[4].textContent.split(":")
+            let [hora, minuto] = rowList.cells[5].textContent.split(":")
 
             txtHoraFormacao.parentNode.classList.add("active")
             txtHoraFormacao.value = hora
@@ -201,11 +208,11 @@ async function editarRegistroFormando(event){
             txtMinutoFormacao.value = minuto
 
             slcLocalCurso.parentNode.classList.add("active")
-            slcLocalCurso.value = rowList.cells[5].getAttribute("data-id-local")
+            slcLocalCurso.value = rowList.cells[6].getAttribute("data-id-local")
 
             if(btnSaveFormando){
                 btnSaveFormando.addEventListener("click", async()=>{
-                    let resultCheckVazio = checkVazioFormando()
+                    let resultCheckVazio = checkVazioFormando(1)
                     if(!resultCheckVazio){
                         loadAwaitAction("show")
                         let dados = {
@@ -218,6 +225,7 @@ async function editarRegistroFormando(event){
                             minuto : txtMinutoFormacao.value,
                             loja : slcLocalCurso.value,
                             idFormando : idFormacao,
+                            estado : 1
                         }
 
                         let resultCrud = await CRUDFormando(JSON.stringify(dados))
@@ -300,6 +308,13 @@ async function excluirRegistroFormando(id) {
     }
 }
 
+let slcSituacao = document.getElementById("slcSituacao")
+if(slcSituacao){
+    slcSituacao.addEventListener("change",async()=>{
+        await monteListFormando(1)
+    })
+}
+
 //btnSearchFirstFormando
 let btnSearchFirstFormando = document.getElementById("btnSearchFirstFormando")
 if(btnSearchFirstFormando){
@@ -310,7 +325,7 @@ if(btnSearchFirstFormando){
         let txtAteFormando = document.getElementById("txtAteFormando")
 
         if(txtDeFormando.value != '' || txtAteFormando.value != ''){
-            await monteListFormando(0)
+            await monteListFormando(1)
         } else {
             if(txtBuscaFormando.value == ''){
                 return msgAlert("alert-warning", "O campo de busca está vazio. Se quiser buscar por algo, informe o texto")
@@ -318,102 +333,116 @@ if(btnSearchFirstFormando){
                 if(slcTipoSearch.value == ''){
                     return msgAlert("alert-warning", "Escolha um tipo de busca")
                 } else {
-                    await monteListFormando(0)
+                    await monteListFormando(1)
                 }
             }
         }
     })
 }
 
-let btnAddFormando = document.getElementById("btnAddFormando")
-if(btnAddFormando){
+async function novaFormacao(btn){
     try {
-        btnAddFormando.addEventListener("click",async ()=>{
-            let {modalEl, container, nomeRoute} = await openModal("modal-add-formando", "Adicionar nova Formação")
-    
-            modalEl.addEventListener("shown.bs.modal", async()=>{
-                await loadListCursoSLC("slcTipoCurso")
-                await loadListLojaSLC("slcLocalCurso")
-    
-                let btnSaveFormando = document.getElementById("btnSaveFormando")
-                let btnSearchFormando = document.getElementById("btnSearchFormando")
-    
-                let txtCodColaborador = document.getElementById("txtCodColaborador")
-                let txtNomeColaborador = document.getElementById("txtNomeColaborador")
-                let slcTipoCurso = document.getElementById("slcTipoCurso")
-                let txtDataFormacao = document.getElementById("txtDataFormacao")
-                let txtHoraFormacao = document.getElementById("txtHoraFormacao")
-                let txtMinutoFormacao = document.getElementById("txtMinutoFormacao")
-                let slcLocalCurso = document.getElementById("slcLocalCurso")
-                
-                if(btnSearchFormando){
-                    btnSearchFormando.addEventListener("click", async ()=>{
-                        if(txtCodColaborador.value == ''){
-                            msgAlert("alert-warning", "Primeiro informe o código do funcionario")
-                        } else {
-                            let dados = {
-                                action : '',
-                                paginaSet : 0,
-                                codColaborador : txtCodColaborador.value,
-                                nomeColaborador : ''
-                            }
-    
-                            let resultSearch = await searchDadosFuncionario(JSON.stringify(dados))
-    
-                            if(resultSearch && typeof resultSearch == 'object' && resultSearch.obj.length > 0){
-                                resultSearch.obj.forEach(item=>{
-                                    txtNomeColaborador.parentNode.classList.add("active")
-                                    txtNomeColaborador.value = item.nomeColaborador
-                                })
-                            } else {
-                                txtNomeColaborador.value = ''
-                                txtNomeColaborador.parentNode.classList.remove("active")
-                                msgAlert("alert-warning", "Nenhum colaborador foi encontrado com esse código.")
-                            }
-                        }
-                    })
-                }
-    
-                if(btnSaveFormando){
-                    btnSaveFormando.addEventListener("click", async()=>{
-                        let resultCheckVazio = checkVazioFormando()
-                        if(!resultCheckVazio){
-                            
-                            let dados = {
-                                action : 'salvar',
-                                codColaborador : txtCodColaborador.value,
-                                nomeColaborador : txtNomeColaborador.value,
-                                curso : slcTipoCurso.value,
-                                data : txtDataFormacao.value,
-                                hora : txtHoraFormacao.value.padStart(2,0),
-                                minuto : txtMinutoFormacao.value.padStart(2,0),
-                                loja : slcLocalCurso.value,
-                            }
-    
-                            let resultCrud = await CRUDFormando(JSON.stringify(dados))
-    
-                            setTimeout(async()=>{
-                                await monteListFormando(0)
-                            },800)
+        loadAwaitAction("show")
+        let btnAction = btn
+        let idBtn = btnAction.id
+        console.log(idBtn)
+        let titleModal = "Adicionar nova Formação"
+        let estado = 1
+        
+        if(idBtn == "btnAddPlanearFormando") titleModal = "Planear Nova Formação"
+        if(idBtn == "btnAddPlanearFormando") estado = 0
 
-                            if(resultCrud && typeof resultCrud == 'object' && resultCrud.obj.sucesso){
-                                txtCodColaborador.value = ''
-                                txtCodColaborador.parentNode.classList.remove("active")
-                                txtNomeColaborador.value = ''
-                                txtNomeColaborador.parentNode.classList.remove("active")
-                                slcTipoCurso.value = '0'
-                                txtDataFormacao.value = ''
-                                txtDataFormacao.parentNode.classList.remove("active")
-                                txtHoraFormacao.value = ''
-                                txtHoraFormacao.parentNode.classList.remove("active")
-                                txtMinutoFormacao.value = ''
-                                txtMinutoFormacao.parentNode.classList.remove("active")
-                                slcLocalCurso.value = '0'
-                            }
+        let {modalEl, container, nomeRoute} = await openModal("modal-add-formando", titleModal)
+        
+        modalEl.addEventListener("shown.bs.modal", async()=>{
+            await loadListCursoSLC("slcTipoCurso")
+            await loadListLojaSLC("slcLocalCurso")
+            
+            let btnSaveFormando = document.getElementById("btnSaveFormando")
+            let btnSearchFormando = document.getElementById("btnSearchFormando")
+
+            let txtCodColaborador = document.getElementById("txtCodColaborador")
+            let txtNomeColaborador = document.getElementById("txtNomeColaborador")
+            let slcTipoCurso = document.getElementById("slcTipoCurso")
+            let txtDataFormacao = document.getElementById("txtDataFormacao")
+            let txtHoraFormacao = document.getElementById("txtHoraFormacao")
+            let txtMinutoFormacao = document.getElementById("txtMinutoFormacao")
+            let slcLocalCurso = document.getElementById("slcLocalCurso")
+            
+            if(idBtn == "btnAddPlanearFormando"){
+                txtHoraFormacao.parentNode.classList.add("d-none")
+                txtMinutoFormacao.parentNode.classList.add("d-none")
+            }
+
+            loadAwaitAction("")
+
+            if(btnSearchFormando){
+                btnSearchFormando.addEventListener("click", async ()=>{
+                    if(txtCodColaborador.value == ''){
+                        msgAlert("alert-warning", "Primeiro informe o código do funcionario")
+                    } else {
+                        let dados = {
+                            action : '',
+                            paginaSet : 0,
+                            codColaborador : txtCodColaborador.value,
+                            nomeColaborador : ''
                         }
-                    })
-                }
-            })
+
+                        let resultSearch = await searchDadosFuncionario(JSON.stringify(dados))
+
+                        if(resultSearch && typeof resultSearch == 'object' && resultSearch.obj.length > 0){
+                            resultSearch.obj.forEach(item=>{
+                                txtNomeColaborador.parentNode.classList.add("active")
+                                txtNomeColaborador.value = item.nomeColaborador
+                            })
+                        } else {
+                            txtNomeColaborador.value = ''
+                            txtNomeColaborador.parentNode.classList.remove("active")
+                            msgAlert("alert-warning", "Nenhum colaborador foi encontrado com esse código.")
+                        }
+                    }
+                })
+            }
+
+            if(btnSaveFormando){
+                btnSaveFormando.addEventListener("click", async()=>{
+                    let resultCheckVazio = checkVazioFormando(estado)
+                    if(!resultCheckVazio){
+                        let dados = {
+                            action : 'salvar',
+                            codColaborador : txtCodColaborador.value,
+                            nomeColaborador : txtNomeColaborador.value,
+                            curso : slcTipoCurso.value,
+                            data : txtDataFormacao.value,
+                            hora : txtHoraFormacao.value.padStart(2,0),
+                            minuto : txtMinutoFormacao.value.padStart(2,0),
+                            loja : slcLocalCurso.value,
+                            estado : estado,
+                        }
+
+                        let resultCrud = await CRUDFormando(JSON.stringify(dados))
+
+                        setTimeout(async()=>{
+                            await monteListFormando(0)
+                        },800)
+
+                        if(resultCrud && typeof resultCrud == 'object' && resultCrud.obj.sucesso){
+                            txtCodColaborador.value = ''
+                            txtCodColaborador.parentNode.classList.remove("active")
+                            txtNomeColaborador.value = ''
+                            txtNomeColaborador.parentNode.classList.remove("active")
+                            slcTipoCurso.value = '0'
+                            txtDataFormacao.value = ''
+                            txtDataFormacao.parentNode.classList.remove("active")
+                            txtHoraFormacao.value = ''
+                            txtHoraFormacao.parentNode.classList.remove("active")
+                            txtMinutoFormacao.value = ''
+                            txtMinutoFormacao.parentNode.classList.remove("active")
+                            slcLocalCurso.value = '0'
+                        }
+                    }
+                })
+            }
         })
     } catch (error) {
         console.log(error)
@@ -424,7 +453,7 @@ if(btnAddFormando){
  * 
  * @returns false se estiver tudo ok
  */
-function checkVazioFormando(){
+function checkVazioFormando(estado){
     try {
         let txtCodColaborador = document.getElementById("txtCodColaborador")
         let txtNomeColaborador = document.getElementById("txtNomeColaborador")
@@ -451,51 +480,54 @@ function checkVazioFormando(){
         } else {
             txtNomeColaborador.classList.remove("border-danger")
         }
+        
+        if(estado == 1){
+            if(slcTipoCurso.value == 0){
+                slcTipoCurso.classList.add("border-danger")
+                slcTipoCurso.focus()
+                msgAlert("alert-warning", "O campo formação do colaborador está vazio")
+                return true
+            } else {
+                slcTipoCurso.classList.remove("border-danger")
+            }
 
-        if(slcTipoCurso.value == 0){
-            slcTipoCurso.classList.add("border-danger")
-            slcTipoCurso.focus()
-            msgAlert("alert-warning", "O campo formação do colaborador está vazio")
-            return true
-        } else {
-            slcTipoCurso.classList.remove("border-danger")
+            if(txtDataFormacao.value == ''){
+                txtDataFormacao.classList.add("border-danger")
+                txtDataFormacao.focus()
+                msgAlert("alert-warning", "Informe a data que ocorreu a formação")
+                return true
+            } else {
+                txtDataFormacao.classList.remove("border-danger")
+            }
+
+            if(txtHoraFormacao.value == ''){
+                txtHoraFormacao.classList.add("border-danger")
+                txtHoraFormacao.focus()
+                msgAlert("alert-warning", "Quantas horas durou a formaçao")
+                return true
+            } else {
+                txtHoraFormacao.classList.remove("border-danger")
+            }
+    
+            if(txtMinutoFormacao.value == ''){
+                txtMinutoFormacao.classList.add("border-danger")
+                txtMinutoFormacao.focus()
+                msgAlert("alert-warning", "Irfome o minuto que durou a formação, use 0 para informar que não houve minuto a mais")
+                return true
+            } else {
+                txtMinutoFormacao.classList.remove("border-danger")
+            }
+       
+            if(slcLocalCurso.value == 0){
+                slcLocalCurso.classList.add("border-danger")
+                slcLocalCurso.focus()
+                msgAlert("alert-warning", "Qual foi o local de formação")
+                return true
+            } else {
+                slcLocalCurso.classList.remove("border-danger")
+            }
         }
 
-        if(txtDataFormacao.value == ''){
-            txtDataFormacao.classList.add("border-danger")
-            txtDataFormacao.focus()
-            msgAlert("alert-warning", "Informe a data que ocorreu a formação")
-            return true
-        } else {
-            txtDataFormacao.classList.remove("border-danger")
-        }
-
-        if(txtHoraFormacao.value == ''){
-            txtHoraFormacao.classList.add("border-danger")
-            txtHoraFormacao.focus()
-            msgAlert("alert-warning", "Quantas horas durou a formaçao")
-            return true
-        } else {
-            txtHoraFormacao.classList.remove("border-danger")
-        }
-
-        if(txtMinutoFormacao.value == ''){
-            txtMinutoFormacao.classList.add("border-danger")
-            txtMinutoFormacao.focus()
-            msgAlert("alert-warning", "Irfome o minuto que durou a formação, use 0 para informar que não houve minuto a mais")
-            return true
-        } else {
-            txtMinutoFormacao.classList.remove("border-danger")
-        }
-
-        if(slcLocalCurso.value == 0){
-            slcLocalCurso.classList.add("border-danger")
-            slcLocalCurso.focus()
-            msgAlert("alert-warning", "Qual foi o local de formação")
-            return true
-        } else {
-            slcLocalCurso.classList.remove("border-danger")
-        }
         return false
 
     } catch (error) {
