@@ -14,19 +14,33 @@
             width: 100%;
         }
 
+        #continerSubEscala{
+            display: none;
+        }
+
         @media print {
 
             @page {
                 size: A4;
-                margin: 10mm; /* Margem mínima para não cortar na impressora */
+                margin: 3mm;
             }
 
             body {
                 width: 100%;
                 margin: 0;
                 padding: 0;
-                font-size: 10pt; /* Reduz ligeiramente a fonte geral */
+                font-size: 10pt;
             }
+
+            table{
+                padding: 0 !important;
+            }
+
+            #continerSubEscala {
+                display: block !important;
+                visibility: visible !important;
+            }
+
              .no-print {
                 display: none !important;
             }
@@ -54,18 +68,15 @@
                 padding: 0 !important;
             }
 
-            /* Força a quebra de página ANTES de cada linha de colaborador */
             .quebra-pagina {
                 break-before: page !important;
                 -webkit-column-break-before: always !important;
             }
 
-            /* Remove espaços desnecessários no topo da primeira página */
             .row-colaborador:first-child {
                 break-before: auto !important;
             }
 
-            /* Garante que o conteúdo do "collapse" não seja cortado */
             .collapse {
                 display: block !important;
                 height: auto !important;

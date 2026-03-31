@@ -416,6 +416,7 @@ function criarEscala(result){
         console.log(result)
         result.forEach(item=>{
             let newTR = document.createElement("tr")
+            newTR.classList.add("rowList")
             newTR.innerHTML = `<td class="text-center" data-id-cod-colaborador='${item.id}'><small>${item.nome}<br>- ${item.id}</small></td>`
 
             item.escalas.forEach((element, index) => {
@@ -1045,12 +1046,134 @@ function processarRelatorio(texto) {
 
 function exibirTabela(dados) {
     let corpo = document.getElementById("bodyTable")
+    let tableCriarEscala = document.getElementById("tableCriarEscala")
+    let tbodyCriarEscala = tableCriarEscala.querySelector("#tbodyCriarEscala")
+
     corpo.innerHTML = ""
     let htmlFinal = ""
-
+    let htmlEscala = ""
     Object.entries(dados).forEach(([nome, info]) => {
         let yAtraso = info.historicoProblemas.reduce((acc, p) => acc + (Number(p.ta) || 0), 0)
         let yCedo = info.historicoProblemas.reduce((acc, p) => acc + (Number(p.tc) || 0), 0)
+
+        tbodyCriarEscala.querySelectorAll(".rowList").forEach(item=>{
+            let getId = item.cells[0].getAttribute("data-id-cod-colaborador")
+            if(Number(getId) == Number(info.id)){
+                let colDia = tableCriarEscala.querySelector("thead tr")
+                let colSemana = tableCriarEscala.querySelector(".rowListSemana")
+                htmlEscala = `
+                        <td class="" colspan="9">
+                            <table class="col w-100 d-none" id="continerSubEscala">
+                                <thead>
+                                    <tr>
+                                        <th class="border border-dark"><span>${colDia.cells[1].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[2].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[3].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[4].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[5].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[6].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[7].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[8].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[9].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[10].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[11].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[12].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[13].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[14].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[15].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[16].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[17].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[18].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[19].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[20].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[21].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[22].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[23].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[24].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[25].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[26].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[27].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[28].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[29].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[30].textContent}</span></th>
+                                        <th class="border border-dark"><span>${colDia.cells[31].textContent}</span></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="border border-dark"><span>${colSemana.cells[1].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[2].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[3].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[4].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[5].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[6].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[7].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[8].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[9].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[10].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[11].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[12].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[13].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[14].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[15].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[16].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[17].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[18].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[19].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[20].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[21].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[22].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[23].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[24].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[25].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[26].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[27].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[28].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[29].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[30].textContent.substring(0,1)}</span></th>
+                                        <th class="border border-dark"><span>${colSemana.cells[31].textContent.substring(0,1)}</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-dark">${item.cells[1].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[2].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[3].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[4].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[5].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[6].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[7].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[8].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[9].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[10].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[11].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[12].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[13].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[14].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[15].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[16].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[17].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[18].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[19].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[20].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[21].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[22].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[23].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[24].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[25].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[26].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[27].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[28].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[29].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[30].querySelector("select").value}</td>
+                                        <td class="border border-dark">${item.cells[31].querySelector("select").value}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                `
+
+
+            }
+        })
 
         let row = `
         <tr class="row-colaborador row-detalhes quebra-pagina" 
@@ -1069,10 +1192,9 @@ function exibirTabela(dados) {
             <td></td>
         </tr>
 
-        <tr>
-            <td>dsfsd</td>
+        <tr class="">
+            ${htmlEscala}
         </tr>
-
         <tr>
             <td colspan="13" class="p-0 border-0">
                 <div id="detalhe_${info.id}" class="collapse bg-light p-3">
@@ -1125,6 +1247,7 @@ function exibirTabela(dados) {
 // imprimir
 function imprimir(){
     let corpoTabela = document.getElementById("bodyTable")
+    
     if (!corpoTabela || corpoTabela.rows.length === 0) {
         return msgAlert("alert-warning", "O documento ainda não foi gerado \n Clique em 'Carregar' para gerar.")
     }
